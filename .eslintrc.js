@@ -1,6 +1,6 @@
 module.exports = {
     root: true,
-    parser: '@babel/eslint-parser',
+
     env: {
         node: true,
         browser: true,
@@ -12,12 +12,16 @@ module.exports = {
         'plugin:react/recommended',
         'plugin:prettier/recommended',
     ],
+    parser: '@babel/eslint-parser',
     parserOptions: {
         ecmaFeatures: {
             jsx: true,
         },
         ecmaVersion: 2020,
         requireConfigFile: false,
+        babelOptions: {
+            presets: ['@babel/preset-react'],
+        },
     },
     plugins: ['react', '@next/eslint-plugin-next', 'prettier'],
     rules: {
@@ -37,6 +41,7 @@ module.exports = {
         'react/no-unescaped-entities': 0,
         'react/require-default-props': 0,
         'react/react-in-jsx-scope': 0,
+        'no-unused-vars': 'off',
         'linebreak-style': ['error', 'unix'],
         semi: ['error', 'never'],
         'prettier/prettier': [

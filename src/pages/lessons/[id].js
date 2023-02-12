@@ -3,17 +3,20 @@ import Head from 'next/head'
 import axios from '@/lib/axios'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import YoutubeIFrame from '@/components/YoutubeIFrame'
 
-const Dashboard = () => {
-    const [courses, setCourses] = useState([])
+const Course = () => {
+    const [lesson, setLesson] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const router = useRouter()
+    const { id } = router.query
     const getLink = path => `${router.basePath}${path}`
-    const fetchCourses = async () => {
+    const fetchCourse = async () => {
+        if (!id) return
         try {
-            const response = await axios.get('/courses')
-            setCourses(response.data.data)
+            const response = await axios.get('/lessons/' + id)
+            setLesson(response.data.data)
         } catch (error) {
             setError(error)
         }
@@ -21,13 +24,13 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        fetchCourses().then(r => console.log(r))
-    }, [])
+        fetchCourse()
+    }, [id])
     return (
         <AppLayout
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Dashboard
+                    {lesson && lesson.name}
                 </h2>
             }>
             <Head>
@@ -35,40 +38,43 @@ const Dashboard = () => {
             </Head>
             {loading && <div>Loading...</div>}
             {error && <div>Error: {error.message}</div>}
-            {courses && (
+            {lesson && (
                 <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-                    {courses.map(course => (
-                        <a href={getLink(`/courses/${course.id}`)}>
+                    {lesson.video_url &&
+                        lesson.video_url
+                            .toString()
+                            .startsWith('https://www.youtube.com/') && (
+                            <YoutubeIFrame
+                                videoId={lesson.video_url.split('v=')[1]}
+                                videoTitle="Lesson"
+                            />
+                        )}
+                    {lesson.attachment_path && (
+                        <a
+                            href={lesson.attachment_path}
+                            target="_blank"
+                            rel="noreferrer">
                             <div className="max-w-sm rounded overflow-hidden shadow-lg">
-                                {course.image && (
-                                    <img
-                                        className="w-full"
-                                        src={course.image}
-                                        alt={course.name}
-                                    />
-                                )}
+                                <img
+                                    className="w-full"
+                                    src={lesson.attachment_path}
+                                    alt="Sunset in the mountains"
+                                />
                                 <div className="px-6 py-4">
                                     <div className="font-bold text-xl mb-2">
-                                        {course.name}
+                                        Attachment
                                     </div>
                                     <p className="text-gray-700 text-base">
-                                        {course.description}
+                                        {lesson.description}
                                     </p>
-                                </div>
-                                <div className="px-6 pt-4 pb-2">
-                                    {course.categories.map(category => (
-                                        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                                            {category.name}
-                                        </span>
-                                    ))}
                                 </div>
                             </div>
                         </a>
-                    ))}
+                    )}
                 </div>
             )}
         </AppLayout>
     )
 }
 
-export default Dashboard
+export default Course
