@@ -9,6 +9,7 @@ const Course = () => {
     const [lesson, setLesson] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [page, setPage] = useState(null)
     const router = useRouter()
     const { id } = router.query
     const getLink = path => `${router.basePath}${path}`
@@ -26,6 +27,7 @@ const Course = () => {
     useEffect(() => {
         fetchCourse()
     }, [id])
+    
     return (
         <AppLayout
             header={

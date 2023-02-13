@@ -55,50 +55,43 @@ const Course = () => {
             <Head>
                 <title>Laravel - Dashboard</title>
             </Head>
+
+
             {loading && <div>Loading...</div>}
             {error && <div>Error: {error.message}</div>}
-            <div className="flex flex-row flex-wrap justify-center mt-16">
+            <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
                 {course &&
                     course.lessons_sectioned &&
                     Object.entries(course.lessons_sectioned).map(
                         ([section, lessons]) => (
-                            <div key={section}>
-                                <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-                                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+
+                            <div class="flex justify-center" key={section}>
+                                <div class="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
+
+                                    <span
+                                        aria-current="true"
+                                        class=" block px-6 py-2 border-b border-gray-200 w-full rounded-t-lg bg-blue-600 text-white"
+                                    >
                                         {section}
-                                    </h3>
+                                    </span>
                                     {lessons.map(lesson => (
-                                        <a
-                                            key={lesson.id}
-                                            href={getLink(
-                                                `/lessons/${lesson.id}`,
-                                            )}>
-                                            <div className="max-w-sm rounded overflow-hidden shadow-lg">
-                                                {lesson.image && (
-                                                    <img
-                                                        className="w-full"
-                                                        src={lesson.image}
-                                                        alt={lesson.name}
-                                                    />
-                                                )}
-                                                <div className="px-6 py-4">
-                                                    <div className="font-bold text-xl mb-2">
-                                                        {lesson.name}
-                                                    </div>
-                                                    <p className="text-gray-700 text-base">
-                                                        {lesson.description}
-                                                    </p>
-                                                </div>
-                                                <div className="px-6 pt-4 pb-2" />
-                                            </div>
-                                        </a>
+                                        <div class="rounded overflow-hidden space-y-4">
+                                            
+                                            <a
+                                                href={getLink(`/lessons/${lesson.id}`)}
+                                                class="block px-6 py-2 border-b border-gray-200w-fulltransitionduration-500 cursor-pointer"
+                                            >
+                                                {lesson.name}
+                                            </a>
+                                        </div>
                                     ))}
+
                                 </div>
                             </div>
                         ),
                     )}
             </div>
-        </AppLayout>
+        </AppLayout >
     )
 }
 
