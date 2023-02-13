@@ -1,8 +1,8 @@
-import AppLayout from '@/components/Layouts/AppLayout'
-import Head from 'next/head'
-import axios from '@/lib/axios'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import AppLayout from "@/components/Layouts/AppLayout";
+import Head from "next/head";
+import axios from "@/lib/axios";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 function SubjectCard(props) {
     return (
@@ -56,7 +56,6 @@ const Course = () => {
                 <title>Laravel - Dashboard</title>
             </Head>
 
-
             {loading && <div>Loading...</div>}
             {error && <div>Error: {error.message}</div>}
             <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
@@ -64,34 +63,30 @@ const Course = () => {
                     course.lessons_sectioned &&
                     Object.entries(course.lessons_sectioned).map(
                         ([section, lessons]) => (
-
-                            <div class="flex justify-center" key={section}>
-                                <div class="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
-
+                            <div className="flex justify-center" key={section}>
+                                <div className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
                                     <span
                                         aria-current="true"
-                                        class=" block px-6 py-2 border-b border-gray-200 w-full rounded-t-lg bg-blue-600 text-white"
-                                    >
+                                        className=" block px-6 py-2 border-b border-gray-200 w-full rounded-t-lg bg-blue-600 text-white">
                                         {section}
                                     </span>
                                     {lessons.map(lesson => (
-                                        <div class="rounded overflow-hidden space-y-4">
-                                            
+                                        <div className="rounded overflow-hidden space-y-4" key={lesson.id}>
                                             <a
-                                                href={getLink(`/lessons/${lesson.id}`)}
-                                                class="block px-6 py-2 border-b border-gray-200w-fulltransitionduration-500 cursor-pointer"
-                                            >
+                                                href={getLink(
+                                                    `/lessons/${lesson.id}`
+                                                )}
+                                                className="block px-6 py-2 border-b border-gray-200w-fulltransitionduration-500 cursor-pointer">
                                                 {lesson.name}
                                             </a>
                                         </div>
                                     ))}
-
                                 </div>
                             </div>
                         ),
                     )}
             </div>
-        </AppLayout >
+        </AppLayout>
     )
 }
 

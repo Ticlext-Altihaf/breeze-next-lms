@@ -1,14 +1,12 @@
-import ApplicationLogo from '@/components/ApplicationLogo'
-import Dropdown from '@/components/Dropdown'
-import Link from 'next/link'
-import NavLink from '@/components/NavLink'
-import ResponsiveNavLink, {
-    ResponsiveNavButton,
-} from '@/components/ResponsiveNavLink'
-import { DropdownButton } from '@/components/DropdownLink'
-import { useAuth } from '@/hooks/auth'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import ApplicationLogo from "@/components/ApplicationLogo";
+import Dropdown from "@/components/Dropdown";
+import Link from "next/link";
+import NavLink from "@/components/NavLink";
+import ResponsiveNavLink, { ResponsiveNavButton } from "@/components/ResponsiveNavLink";
+import { DropdownButton } from "@/components/DropdownLink";
+import { useAuth } from "@/hooks/auth";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 const Navigation = ({ user }) => {
     const router = useRouter()
@@ -34,9 +32,23 @@ const Navigation = ({ user }) => {
                         <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                             <NavLink
                                 href="/dashboard"
-                                active={router.pathname === '/dashboard'}>
+                                active={router.pathname === "/dashboard"}>
                                 Dashboard
                             </NavLink>
+                            {user && (user.is_teacher || user.is_admin) && (
+                                <NavLink
+                                    href="/teacher"
+                                    active={router.pathname === "/teacher"}>
+                                    Teacher
+                                </NavLink>
+                            )}
+                            {user && user.is_admin && (
+                                <NavLink
+                                    href="/admin"
+                                    active={router.pathname === "/admin"}>
+                                    Admin
+                                </NavLink>
+                            )}
                         </div>
                     </div>
 

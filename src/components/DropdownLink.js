@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import { Menu } from '@headlessui/react'
+import Link from "next/link";
+import { Menu } from "@headlessui/react";
 
 const DropdownLink = ({ children, ...props }) => (
     <Menu.Item>

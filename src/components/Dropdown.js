@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Menu, Transition } from '@headlessui/react'
+import React, { useState } from "react";
+import { Menu, Transition } from "@headlessui/react";
 
 const Dropdown = ({
     align = 'right',

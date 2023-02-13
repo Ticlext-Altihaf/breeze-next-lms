@@ -1,24 +1,48 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import { useAuth } from '@/hooks/auth'
+import Head from "next/head";
+import Link from "next/link";
+import { useAuth } from "@/hooks/auth";
+import { useRouter } from "next/router";
 
 export default function Home() {
-    const { user } = useAuth({ middleware: 'guest' })
+    const { user } = useAuth({ middleware: "guest" });
+    const router = useRouter();
 
+    //if exists user, redirect to dashboard
+    if (user) {
+        router.push("/dashboard");
+    }
     return (
         <>
             <Head>
                 <title>Laravel</title>
             </Head>
 
-            <div className="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
+            <div
+                className="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
                 <div className="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                     {user ? (
-                        <Link
-                            href="/dashboard"
-                            className="ml-4 text-sm text-gray-700 underline">
-                            Dashboard
-                        </Link>
+                        <div>
+                            <Link
+                                href="/dashboard"
+                                className="ml-4 text-sm text-gray-700 underline">
+                                Dashboard
+                            </Link>
+
+                            {(user.is_teacher || user.is_admin) && (
+                                <Link
+                                    href="/teacher"
+                                    className="ml-4 text-sm text-gray-700 underline">
+                                    Teacher
+                                </Link>
+                            )}
+                            {user.is_admin && (
+                                <Link
+                                    href="/admin"
+                                    className="ml-4 text-sm text-gray-700 underline">
+                                    Admin
+                                </Link>
+                            )}
+                        </div>
                     ) : (
                         <>
                             <Link

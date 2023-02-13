@@ -6,14 +6,17 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
-            },
+                sans: ["Nunito", ...defaultTheme.fontFamily.sans]
+            }
         },
     },
     variants: {
         extend: {
-            opacity: ['disabled'],
-        },
+            opacity: ["disabled"]
+        }
     },
-    plugins: [require('@tailwindcss/forms')],
+    plugins: [
+        require("@tailwindcss/forms"),
+        require("@tailwindcss/typography")
+    ]
 }

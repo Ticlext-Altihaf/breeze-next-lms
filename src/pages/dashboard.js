@@ -1,8 +1,8 @@
-import AppLayout from '@/components/Layouts/AppLayout'
-import Head from 'next/head'
-import axios from '@/lib/axios'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import AppLayout from "@/components/Layouts/AppLayout";
+import Head from "next/head";
+import axios from "@/lib/axios";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const Dashboard = () => {
     const [courses, setCourses] = useState([])
@@ -38,7 +38,9 @@ const Dashboard = () => {
             {courses && (
                 <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
                     {courses.map(course => (
-                        <a href={getLink(`/courses/${course.id}`)}>
+                        <a
+                            href={getLink(`/courses/${course.id}`)}
+                            key={course.id}>
                             <div className="max-w-sm rounded overflow-hidden shadow-lg">
                                 {course.image && (
                                     <img
@@ -57,7 +59,9 @@ const Dashboard = () => {
                                 </div>
                                 <div className="px-6 pt-4 pb-2">
                                     {course.categories.map(category => (
-                                        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                                        <span
+                                            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                                            key={category.id}>
                                             {category.name}
                                         </span>
                                     ))}

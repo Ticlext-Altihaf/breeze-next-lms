@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from "next/link";
 
 const ResponsiveNavLink = ({ active = false, children, ...props }) => (
     <Link
