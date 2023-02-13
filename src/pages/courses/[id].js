@@ -1,8 +1,8 @@
-import AppLayout from "@/components/Layouts/AppLayout";
-import Head from "next/head";
-import axios from "@/lib/axios";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import AppLayout from '@/components/Layouts/AppLayout'
+import Head from 'next/head'
+import axios from '@/lib/axios'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 function SubjectCard(props) {
     return (
@@ -71,10 +71,12 @@ const Course = () => {
                                         {section}
                                     </span>
                                     {lessons.map(lesson => (
-                                        <div className="rounded overflow-hidden space-y-4" key={lesson.id}>
+                                        <div
+                                            className="rounded overflow-hidden space-y-4"
+                                            key={lesson.id}>
                                             <a
                                                 href={getLink(
-                                                    `/lessons/${lesson.id}`
+                                                    `/lessons/${lesson.id}`,
                                                 )}
                                                 className="block px-6 py-2 border-b border-gray-200w-fulltransitionduration-500 cursor-pointer">
                                                 {lesson.name}

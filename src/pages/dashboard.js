@@ -1,8 +1,8 @@
-import AppLayout from "@/components/Layouts/AppLayout";
-import Head from "next/head";
-import axios from "@/lib/axios";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import AppLayout from '@/components/Layouts/AppLayout'
+import Head from 'next/head'
+import axios from '@/lib/axios'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 const Dashboard = () => {
     const [courses, setCourses] = useState([])
