@@ -4,13 +4,11 @@ import { useAuth } from '@/hooks/auth'
 import { useRouter } from 'next/router'
 
 export default function Home() {
-    const { user } = useAuth({ middleware: 'guest' })
-    const router = useRouter()
+    const { user } = useAuth({
+        middleware: 'guest',
+        redirectIfAuthenticated: '/dashboard',
+    })
 
-    //if exists user, redirect to dashboard
-    if (user) {
-        router.push('/dashboard')
-    }
     return (
         <>
             <Head>

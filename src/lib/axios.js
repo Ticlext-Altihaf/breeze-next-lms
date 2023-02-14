@@ -6,6 +6,9 @@ const axios = Axios.create({
         'X-Requested-With': 'XMLHttpRequest',
         Accept: 'application/json',
     },
+    params: {
+        XDEBUG_SESSION_START: 'PHPSTORM',
+    },
     withCredentials: true,
 })
 

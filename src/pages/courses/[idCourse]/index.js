@@ -3,6 +3,7 @@ import Head from 'next/head'
 import axios from '@/lib/axios'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import Link from "next/link";
 
 function SubjectCard(props) {
     return (
@@ -29,12 +30,12 @@ const Course = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const router = useRouter()
-    const { id } = router.query
+    const { idCourse } = router.query
     const getLink = path => `${router.basePath}${path}`
     const fetchCourse = async () => {
-        if (!id) return
+        if (!idCourse) return
         try {
-            const response = await axios.get('/courses/' + id)
+            const response = await axios.get('/courses/' + idCourse)
             setCourse(response.data.data)
         } catch (error) {
             setError(error)
@@ -44,12 +45,18 @@ const Course = () => {
 
     useEffect(() => {
         fetchCourse().then(r => console.log(r))
-    }, [id])
+    }, [idCourse])
     return (
         <AppLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
                     {course && course.name}
+                    <Link
+                        href={`/courses/${idCourse}/lessons/create`}
+                        passHref={true}
+                        className="font-semibold text-xl text-gray-800 leading-tight">
+                        Create a lesson
+                    </Link>
                 </h2>
             }>
             <Head>
@@ -76,7 +83,7 @@ const Course = () => {
                                             key={lesson.id}>
                                             <a
                                                 href={getLink(
-                                                    `/lessons/${lesson.id}`,
+                                                    `/courses/${idCourse}/lessons/${lesson.id}`,
                                                 )}
                                                 className="block px-6 py-2 border-b border-gray-200w-fulltransitionduration-500 cursor-pointer">
                                                 {lesson.name}

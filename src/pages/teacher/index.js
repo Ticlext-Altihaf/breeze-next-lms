@@ -1,18 +1,26 @@
-import AppLayout from '@/components/Layouts/AppLayout'
 import Head from 'next/head'
-import axios from '@/lib/axios'
-import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { useAuth } from '@/hooks/auth'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import axios from '@/lib/axios'
+import AppLayout from '@/components/Layouts/AppLayout'
 
-const Dashboard = () => {
+export default function TeacherHome() {
+    const { user } = useAuth({ middleware: 'guest' })
+    const router = useRouter()
+    if (user && !user.is_teacher && !user.is_admin) {
+        router.push('/') //Major L
+    }
     const [courses, setCourses] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
-    const router = useRouter()
+
     const getLink = path => `${router.basePath}${path}`
     const fetchCourses = async () => {
+        if (!user) return
         try {
-            const response = await axios.get('/courses')
+            const response = await axios.get('/courses?author_id=' + user.id)
             setCourses(response.data.data)
         } catch (error) {
             setError(error)
@@ -22,19 +30,32 @@ const Dashboard = () => {
 
     useEffect(() => {
         fetchCourses().then(r => console.log(r))
-    }, [])
+    }, [user])
     return (
         <AppLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Dashboard
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
+                    Teacher - Dashboard
+                    <Link
+                        href="/courses/create"
+                        passHref={true}
+                        className="font-semibold text-xl text-gray-800 leading-tight">
+                        Create a course
+                    </Link>
                 </h2>
             }>
             <Head>
-                <title>Laravel - Dashboard</title>
+                <title>Teacher - Dashboard</title>
             </Head>
             {loading && <div>Loading...</div>}
             {error && <div>Error: {error.message}</div>}
+            {courses && courses.length === 0 && (
+                <div className="p-10 flex justify-center">
+                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                        You have no courses yet.
+                    </h2>
+                </div>
+            )}
             {courses && (
                 <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
                     {courses.map(course => (
@@ -74,5 +95,3 @@ const Dashboard = () => {
         </AppLayout>
     )
 }
-
-export default Dashboard

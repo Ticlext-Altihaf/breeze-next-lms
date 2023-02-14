@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import YoutubeIFrame from '@/components/YoutubeIFrame'
 import ReactMarkdown from 'react-markdown'
+import Link from "next/link";
 
 const Course = () => {
     const [lesson, setLesson] = useState(null)
@@ -12,12 +13,12 @@ const Course = () => {
     const [error, setError] = useState(null)
     const [page, setPage] = useState(0)
     const router = useRouter()
-    const { id } = router.query
+    const { idLesson, idCourse } = router.query
     const getLink = path => `${router.basePath}${path}`
     const fetchCourse = async () => {
-        if (!id) return
+        if (!idLesson) return
         try {
-            const response = await axios.get('/lessons/' + id)
+            const response = await axios.get('/lessons/' + idLesson)
             setLesson(response.data.data)
         } catch (error) {
             setError(error)
@@ -26,7 +27,7 @@ const Course = () => {
     }
     useEffect(() => {
         fetchCourse()
-    }, [id])
+    }, [idLesson])
 
     function onNext(data) {
         if (data) {
@@ -47,14 +48,25 @@ const Course = () => {
     return (
         <AppLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    {lesson && lesson.name} -{' '}
-                    {lesson && lesson.contents[page].name}
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
+                    {lesson && lesson.name}
+                    {content && ' - ' + lesson.contents[page].name}
+                    <Link
+                        href={`/courses/${idCourse}/lessons/${idLesson}/create`}
+                        passHref={true}
+                        className="font-semibold text-xl text-gray-800 leading-tight">
+                        Create a lesson
+                    </Link>
                 </h2>
             }>
             <Head>
                 <title>Laravel - Dashboard</title>
             </Head>
+            {lesson && lesson.contents.length === 0 && (
+                <div className="mt-24 text-center divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0 flex flex-col justify-between xl:px-72 md:px-24 sm:px-12 px-4">
+                    <h1 className="text-2xl font-bold">No content</h1>
+                </div>
+            )}
             {loading && <div>Loading...</div>}
             {error && <div>Error: {error.message}</div>}
             {content && (
