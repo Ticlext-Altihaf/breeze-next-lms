@@ -13,6 +13,6 @@
     text-align: -webkit-match-parent;
 }
 
-.reactMarkDown svg{
+.reactMarkDown svg[aria-roledescription]{
     background-color: white;
 }
