@@ -12,6 +12,7 @@ import rehypeSanitize from 'rehype-sanitize'
 import mermaid from 'mermaid'
 import katex from 'katex'
 import 'katex/dist/katex.css'
+import { useAuth } from '@/hooks/auth'
 
 const MD = dynamic(() => import('@uiw/react-markdown-preview'), { ssr: false })
 
@@ -104,6 +105,7 @@ const Course = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [page, setPage] = useState(0)
+    const { user } = useAuth({ middleware: 'auth' })
     const router = useRouter()
     const { idLesson, idCourse } = router.query
     const getLink = path => `${router.basePath}${path}`
@@ -136,6 +138,8 @@ const Course = () => {
         }
     }
 
+    const isTheAuthor =
+        lesson && (lesson.course.author_id === user.id || user.is_admin)
     const content = lesson && lesson.contents[page]
     return (
         <AppLayout
@@ -143,12 +147,22 @@ const Course = () => {
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
                     {lesson && lesson.name}
                     {content && ' - ' + lesson.contents[page].name}
-                    <Link
-                        href={`/courses/${idCourse}/lessons/${idLesson}/create`}
-                        passHref={true}
-                        className="font-semibold text-xl text-gray-800 leading-tight">
-                        Add content
-                    </Link>
+                    {content && isTheAuthor && (
+                        <Link
+                            href={`/courses/${idCourse}/lessons/${idLesson}/edit/${content.order_no}`}
+                            passHref={true}
+                            className="font-semibold text-xl text-gray-800 leading-tight">
+                            Edit content
+                        </Link>
+                    )}
+                    {isTheAuthor && (
+                        <Link
+                            href={`/courses/${idCourse}/lessons/${idLesson}/create`}
+                            passHref={true}
+                            className="font-semibold text-xl text-gray-800 leading-tight">
+                            Add content
+                        </Link>
+                    )}
                 </h2>
             }>
             <Head>

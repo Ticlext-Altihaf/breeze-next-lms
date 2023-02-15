@@ -3,7 +3,7 @@ import Head from 'next/head'
 import axios from '@/lib/axios'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import Link from "next/link";
+import Link from 'next/link'
 
 function SubjectCard(props) {
     return (

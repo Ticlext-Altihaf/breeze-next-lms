@@ -12,7 +12,7 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 import rehypeSanitize from 'rehype-sanitize'
 import katex from 'katex'
 import 'katex/dist/katex.css'
-export default function CreateLesson() {
+export default function CreateContent(content) {
     const { user } = useAuth({ middleware: 'auth' })
     const router = useRouter()
 

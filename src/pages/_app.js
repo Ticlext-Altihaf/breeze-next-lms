@@ -1,4 +1,11 @@
-import 'tailwindcss/tailwind.css'
-const App = ({ Component, pageProps }) => <Component {...pageProps} />
 
+import '../styles/globals.css'
+import { ThemeProvider } from 'next-themes'
+function App({ Component, pageProps }) {
+    return (
+        <ThemeProvider>
+            <Component {...pageProps} />
+        </ThemeProvider>
+    )
+}
 export default App
