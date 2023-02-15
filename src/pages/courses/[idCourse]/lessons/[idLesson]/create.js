@@ -5,13 +5,9 @@ import axios from '@/lib/axios'
 import AppLayout from '@/components/Layouts/AppLayout'
 import Link from 'next/link'
 import Head from 'next/head'
-import '@uiw/react-md-editor/markdown-editor.css'
-import '@uiw/react-markdown-preview/markdown.css'
-import dynamic from 'next/dynamic'
-const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
-import rehypeSanitize from 'rehype-sanitize'
-import katex from 'katex'
-import 'katex/dist/katex.css'
+import Editor from '@/components/Markdown/Editor'
+import Preview from '@/components/Markdown/Preview'
+
 export default function CreateContent(content) {
     const { user } = useAuth({ middleware: 'auth' })
     const router = useRouter()
@@ -65,16 +61,16 @@ export default function CreateContent(content) {
                     </div>
                 ))}
 
-            <div className="mt-24 text-center divide-y divide-gray-200 pb-8 xl:divide-y-0 flex flex-col justify-between xl:px-72 md:px-24 sm:px-12 px-4 space-y-1">
+            <div className="mt-24 divide-y divide-gray-200 pb-8 xl:divide-y-0 flex flex-col justify-between xl:px-72 md:px-24 sm:px-12 px-4 space-y-1 dark:divide-gray-700">
                 <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 sm:text-sm border-gray-300"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 sm:text-sm border-gray-30 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
                     type="text"
                     placeholder={'Title'}
                     value={title}
                     onChange={e => setTitle(e.target.value)}
                 />
                 <select
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 sm:text-sm border-gray-300"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 sm:text-sm border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
                     value={type}
                     onChange={e => setType(e.target.value)}>
                     <option value="markdown">Markdown</option>
@@ -82,7 +78,7 @@ export default function CreateContent(content) {
                 </select>
                 {type === 'youtube' && (
                     <input
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 sm:text-sm border-gray-300"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 sm:text-sm border-gray-30 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
                         type="text"
                         placeholder={'Youtube Video URL'}
                         value={text}
@@ -90,77 +86,13 @@ export default function CreateContent(content) {
                     />
                 )}
                 {type === 'markdown' && (
-                    <MDEditor
-                        value={text}
-                        onChange={setText}
-                        height={'500px'}
-                        previewOptions={{
-                            rehypePlugins: [rehypeSanitize],
-                            components: {
-                                code: ({
-                                    inline,
-                                    children,
-                                    className,
-                                    ...props
-                                }) => {
-                                    const txt = children[0] || ''
-                                    if (inline) {
-                                        if (
-                                            typeof txt === 'string' &&
-                                            /^\$\$(.*)\$\$/.test(txt)
-                                        ) {
-                                            const html = katex.renderToString(
-                                                txt.replace(
-                                                    /^\$\$(.*)\$\$/,
-                                                    '$1',
-                                                ),
-                                                {
-                                                    throwOnError: false,
-                                                },
-                                            )
-                                            return (
-                                                <code
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: html,
-                                                    }}
-                                                />
-                                            )
-                                        }
-                                        return <code>{txt}</code>
-                                    }
-                                    if (
-                                        typeof txt === 'string' &&
-                                        typeof className === 'string' &&
-                                        /^language-katex/.test(
-                                            className.toLocaleLowerCase(),
-                                        )
-                                    ) {
-                                        const html = katex.renderToString(txt, {
-                                            throwOnError: false,
-                                        })
-                                        console.log(
-                                            'props',
-                                            txt,
-                                            className,
-                                            props,
-                                        )
-                                        return (
-                                            <code
-                                                dangerouslySetInnerHTML={{
-                                                    __html: html,
-                                                }}
-                                            />
-                                        )
-                                    }
-                                    return (
-                                        <code className={String(className)}>
-                                            {txt}
-                                        </code>
-                                    )
-                                },
-                            },
-                        }}
-                    />
+                    <div className="flex flex-1 w-full gap-4">
+                        <Editor
+                            initialDoc={text}
+                            onChange={doc => setText(doc)}
+                        />
+                        <Preview doc={text} />
+                    </div>
                 )}
                 <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4"

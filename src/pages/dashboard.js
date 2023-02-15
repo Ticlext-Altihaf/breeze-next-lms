@@ -26,7 +26,7 @@ const Dashboard = () => {
     return (
         <AppLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 className="font-semibold text-xl leading-tight">
                     Dashboard
                 </h2>
             }>
@@ -53,14 +53,14 @@ const Dashboard = () => {
                                     <div className="font-bold text-xl mb-2">
                                         {course.name}
                                     </div>
-                                    <p className="text-gray-700 text-base">
+                                    <p className="text-gray-700 text-base dark:text-gray-200">
                                         {course.description}
                                     </p>
                                 </div>
                                 <div className="px-6 pt-4 pb-2">
                                     {course.categories.map(category => (
                                         <span
-                                            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                                            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 dark:bg-gray-800 dark:text-gray-200"
                                             key={category.id}>
                                             {category.name}
                                         </span>

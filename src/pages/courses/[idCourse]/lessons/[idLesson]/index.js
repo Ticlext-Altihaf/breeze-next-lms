@@ -4,101 +4,11 @@ import axios from '@/lib/axios'
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import YoutubeIFrame from '@/components/YoutubeIFrame'
-import ReactMarkdown from 'react-markdown'
+
 import Link from 'next/link'
-import '@uiw/react-markdown-preview/markdown.css'
-import dynamic from 'next/dynamic'
-import rehypeSanitize from 'rehype-sanitize'
-import mermaid from 'mermaid'
-import katex from 'katex'
-import 'katex/dist/katex.css'
+
 import { useAuth } from '@/hooks/auth'
-
-const MD = dynamic(() => import('@uiw/react-markdown-preview'), { ssr: false })
-
-const randomid = () => parseInt(String(Math.random() * 1e15), 10).toString(36)
-
-const CodeKatex = ({ inline, children = [], className, ...props }) => {
-    const txt = children[0] || ''
-    if (inline) {
-        if (typeof txt === 'string' && /^\$\$(.*)\$\$/.test(txt)) {
-            const html = katex.renderToString(
-                txt.replace(/^\$\$(.*)\$\$/, '$1'),
-                {
-                    throwOnError: false,
-                },
-            )
-            return <code dangerouslySetInnerHTML={{ __html: html }} />
-        }
-        return <code>{txt}</code>
-    }
-    if (
-        typeof txt === 'string' &&
-        typeof className === 'string' &&
-        /^language-katex/.test(className.toLocaleLowerCase())
-    ) {
-        const html = katex.renderToString(txt, {
-            throwOnError: false,
-        })
-        console.log('props', txt, className, props)
-        return <code dangerouslySetInnerHTML={{ __html: html }} />
-    }
-    return null
-}
-
-const Code = ({ inline, children = [], className, ...props }) => {
-    const katex = CodeKatex({ inline, children, className, ...props })
-    if (katex) {
-        console.log('katex', katex)
-        return katex
-    }
-    const demoid = useRef(`dome${randomid()}`)
-    const code = getCode(children)
-    const demo = useRef(null)
-    useEffect(() => {
-        if (demo.current) {
-            try {
-                // @ts-ignore
-                demo.current.innerHTML = mermaid.render(
-                    demoid.current,
-                    code,
-                    () => null,
-                    demo.current,
-                )
-            } catch (error) {
-                // @ts-ignore
-                demo.current.innerHTML = error
-            }
-        }
-    }, [code, demo])
-
-    if (
-        typeof code === 'string' &&
-        typeof className === 'string' &&
-        /^language-mermaid/.test(className.toLocaleLowerCase())
-    ) {
-        return (
-            <code ref={demo}>
-                <code id={demoid.current} style={{ display: 'none' }} />
-            </code>
-        )
-    }
-    return <code className={String(className)}>{children}</code>
-}
-
-const getCode = (arr = []) =>
-    arr
-        .map(dt => {
-            if (typeof dt === 'string') {
-                return dt
-            }
-            if (dt.props && dt.props.children) {
-                return getCode(dt.props.children)
-            }
-            return false
-        })
-        .filter(Boolean)
-        .join('')
+import Preview from '@/components/Markdown/Preview'
 
 const Course = () => {
     const [lesson, setLesson] = useState(null)
@@ -144,14 +54,14 @@ const Course = () => {
     return (
         <AppLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
+                <h2 className="font-semibold text-xl leading-tight flex justify-between">
                     {lesson && lesson.name}
                     {content && ' - ' + lesson.contents[page].name}
                     {content && isTheAuthor && (
                         <Link
                             href={`/courses/${idCourse}/lessons/${idLesson}/edit/${content.order_no}`}
                             passHref={true}
-                            className="font-semibold text-xl text-gray-800 leading-tight">
+                            className="font-semibold text-xl leading-tight">
                             Edit content
                         </Link>
                     )}
@@ -159,7 +69,7 @@ const Course = () => {
                         <Link
                             href={`/courses/${idCourse}/lessons/${idLesson}/create`}
                             passHref={true}
-                            className="font-semibold text-xl text-gray-800 leading-tight">
+                            className="font-semibold text-xl leading-tight">
                             Add content
                         </Link>
                     )}
@@ -176,16 +86,9 @@ const Course = () => {
             {loading && <div>Loading...</div>}
             {error && <div>Error: {error.message}</div>}
             {content && (
-                <div className="mt-24 text-center divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0 flex flex-col justify-between xl:px-72 md:px-24 sm:px-12 px-4">
+                <div className="mt-24 divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0 flex flex-col justify-between xl:px-72 md:px-24 sm:px-12 px-4">
                     {content.type === 'content' && (
-                        <MD
-                            rehypePlugins={[rehypeSanitize]}
-                            components={{
-                                code: Code,
-                            }}
-                            source={content.text}
-                            className="bg-white dark:bg-gray-800 m-8"
-                        />
+                        <Preview doc={content.text} className="mt-8" />
                     )}
                     {content.type === 'attachment' && (
                         <a href={content.text} target="_blank" rel="noreferrer">
@@ -195,9 +98,7 @@ const Course = () => {
                     {content.type === 'video' && (
                         <YoutubeIFrame videoId={content.video_id} />
                     )}
-                    {content.type === 'quiz' && (
-                        <ReactMarkdown>{content.text}</ReactMarkdown>
-                    )}
+                    {content.type === 'quiz' && <Preview doc={content.text} />}
                     {content.is_true_false && (
                         <div className="flex justify-center xl:mt-8 mt-4">
                             <button
@@ -237,15 +138,15 @@ const Course = () => {
                                             answer_id: answer.id,
                                         })
                                     }}>
-                                    <ReactMarkdown>{answer.text}</ReactMarkdown>
+                                    <Preview doc={answer.text} />
                                 </button>
                             ))}
                         </div>
                     )}
                     {content.is_fill_in_the_blank && (
-                        <div className="flex justify-center xl:mt-8 mt-4 screen">
+                        <div className="flex justify-center xl:mt-8 mt-4 w-full">
                             <input
-                                className="border border-gray-300 rounded-md shadow-sm"
+                                className="border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:text-white dark:border-gray-700"
                                 id="input"
                                 name="answer"
                                 type="text"

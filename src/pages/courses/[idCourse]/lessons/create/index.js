@@ -80,7 +80,7 @@ export default function CreateLesson() {
     return (
         <AppLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
+                <h2 className="font-semibold leading-tight flex justify-between">
                     Teacher - Create Lesson
                 </h2>
             }>
@@ -98,7 +98,7 @@ export default function CreateLesson() {
             <section className=" py-1 bg-blueGray-50">
                 <div className="w-full lg:w-8/12 px-4 mx-auto mt-6">
                     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
-                        <div className="rounded-t bg-white mb-0 px-6 py-6">
+                        <div className="rounded-t bg-white mb-0 px-6 py-6 dark:bg-gray-800">
                             <div className="text-center flex justify-between">
                                 <h6 className="text-blueGray-700 text-xl font-bold">
                                     Create Lesson
@@ -120,7 +120,7 @@ export default function CreateLesson() {
                                             </label>
                                             <input
                                                 type="text"
-                                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 dark:bg-gray-700 dark:text-gray-300"
                                                 name={'title'}
                                                 value={title}
                                                 onChange={e =>
@@ -138,7 +138,7 @@ export default function CreateLesson() {
                                             </label>
                                             <input
                                                 type="text"
-                                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 dark:bg-gray-700 dark:text-gray-300"
                                                 name={'section'}
                                                 value={section}
                                                 onChange={e =>
@@ -151,7 +151,7 @@ export default function CreateLesson() {
                                 <hr className="mt-6 border-b-1 border-blueGray-300" />
                                 <div className="flex justify-end">
                                     <button
-                                        className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                        className="bg-blue-500 text-white active:bg-blue-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 dark:bg-gray-700 dark:text-gray-300"
                                         type="submit">
                                         Create
                                     </button>

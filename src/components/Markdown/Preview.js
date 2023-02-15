@@ -18,7 +18,7 @@ const Preview = props => {
     const { theme, resolvedTheme, forcedTheme } = useTheme()
     console.log(theme, resolvedTheme, forcedTheme)
     return (
-        <div className="w-1/2 preview markdown-body">
+        <div className="preview markdown-body">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath, remarkMermaid]}
                 rehypePlugins={[rehypeKatex]}

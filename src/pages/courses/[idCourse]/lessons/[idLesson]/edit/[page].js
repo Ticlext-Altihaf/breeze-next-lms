@@ -55,7 +55,7 @@ export default function EditContent() {
         return (
             <AppLayout
                 header={
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
+                    <h2 className="font-semibold text-xl leading-tight flex justify-between">
                         Giga
                     </h2>
                 }>

@@ -49,12 +49,12 @@ const Course = () => {
     return (
         <AppLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
+                <h2 className="font-semibold text-xl leading-tight flex justify-between">
                     {course && course.name}
                     <Link
                         href={`/courses/${idCourse}/lessons/create`}
                         passHref={true}
-                        className="font-semibold text-xl text-gray-800 leading-tight">
+                        className="font-semibold text-xl leading-tight">
                         Create a lesson
                     </Link>
                 </h2>
@@ -65,16 +65,16 @@ const Course = () => {
 
             {loading && <div>Loading...</div>}
             {error && <div>Error: {error.message}</div>}
-            <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+            <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 flex justify-center">
                 {course &&
                     course.lessons_sectioned &&
                     Object.entries(course.lessons_sectioned).map(
                         ([section, lessons]) => (
                             <div className="flex justify-center" key={section}>
-                                <div className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
+                                <div className="bg-white rounded-lg border border-gray-200 w-96 text-gray-900 dark:text-gray-100 dark:bg-gray-800 dark:border-gray-700">
                                     <span
                                         aria-current="true"
-                                        className=" block px-6 py-2 border-b border-gray-200 w-full rounded-t-lg bg-blue-600 text-white">
+                                        className="block px-6 py-2 border-b border-gray-200 w-full rounded-t-lg bg-blue-600 text-white font-semibold dark:bg-blue-800 dark:text-gray-100">
                                         {section}
                                     </span>
                                     {lessons.map(lesson => (
@@ -85,7 +85,7 @@ const Course = () => {
                                                 href={getLink(
                                                     `/courses/${idCourse}/lessons/${lesson.id}`,
                                                 )}
-                                                className="block px-6 py-2 border-b border-gray-200w-fulltransitionduration-500 cursor-pointer">
+                                                className="block px-6 py-2 border-b border-gray-200w-fulltransitionduration-500 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
                                                 {lesson.name}
                                             </a>
                                         </div>
