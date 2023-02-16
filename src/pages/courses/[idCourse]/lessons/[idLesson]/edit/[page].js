@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useState, useCallback, useEffect } from 'react'
-
+import * as type from '@/lib/type'
 import CreateContent from '@/pages/courses/[idCourse]/lessons/[idLesson]/create'
 
 import axios from '@/lib/axios'
@@ -12,16 +12,30 @@ import Editor from '@/components/Markdown/Editor'
 import Preview from '@/components/Markdown/Preview'
 import Dropdown from '@/components/Dropdown'
 import { DropdownButton } from '@/components/DropdownLink'
+import Toast from '@/components/Toast'
 export default function EditContent() {
     const router = useRouter()
-    const { page, idLesson, idCourse } = router.query
-    const [content, setContent] = useState(null)
+    const { page: pageStr, idLesson, idCourse } = router.query
+    const page = parseInt(pageStr + '')
+    const [lesson, setLesson] = useState(null)
+    const [content, setContent] = useState(lesson?.contents[page - 1] || null)
     const [error, setError] = useState(null)
-    const [doc, setDoc] = useState(content?.content || '# Loading')
-
+    const [saveSuccess, setSaveSuccess] = useState(false)
+    const [doc, setDoc] = useState(content?.text)
+    if (!doc && content?.text) {
+        setDoc(content?.text)
+    }
+    console.log('doc', doc)
+    console.log('content?.text', content?.text)
+    console.log('content', content)
+    console.log('lesson', lesson)
+    if (!content && lesson) {
+        const selection = lesson?.contents[page - 1]
+        setContent(selection)
+    }
     // prompt the user if they try and leave with unsaved changes
     useEffect(() => {
-        const unsavedChanges = doc !== content?.content
+        const unsavedChanges = doc !== content?.text
         const warningText =
             'You have unsaved changes - are you sure you wish to leave this page?'
         const handleWindowClose = e => {
@@ -47,23 +61,12 @@ export default function EditContent() {
     }, [])
 
     useEffect(() => {
-        if (page) {
+        if (idLesson) {
             axios
                 .get(`/lessons/${idLesson}`)
                 .then(res => {
                     if (res.data.data.contents) {
-                        const content = res.data.data.contents.find(content => {
-                            return content.order_no === parseInt(page)
-                        })
-                        if (!content) {
-                            router.push(
-                                `/courses/${idCourse}/lessons/${idLesson}`,
-                            )
-                        }
-                        if (content.type === 'content') {
-                            setDoc(content.text)
-                        }
-                        setContent(content)
+                        setLesson(res.data.data)
                     }
                 })
                 .catch(err => {
@@ -75,24 +78,70 @@ export default function EditContent() {
                     }
                 })
         }
-    }, [page])
+    }, [idLesson])
+
+    if (page < 1 || page > lesson?.contents.length) {
+        return (
+            <AppLayout
+                header={
+                    <h2 className="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
+                        Teacher - {lesson?.course?.name} - {lesson?.name}
+                    </h2>
+                }>
+                <div className="flex flex-col items-center justify-center min-h-screen">
+                    <p className="text-2xl font-bold">
+                        There is no page {page} in this lesson
+                    </p>
+                    <Link
+                        href={`/courses/${idCourse}/lessons/${idLesson}/edit`}>
+                        <a className="text-blue-500 underline">
+                            Go back to lesson
+                        </a>
+                    </Link>
+                </div>
+            </AppLayout>
+        )
+    }
+
     if (content) {
         let saveContent = e => {
             e.preventDefault()
+            const data = {
+                name: content.name,
+                text: doc,
+                type: content.type,
+                lesson_id: idLesson,
+            }
             axios
-                .put(`/contents/${content.id}`, {
-                    text: doc,
-                })
+                .put(`/contents/${content.id}`, data)
                 .then(res => {
                     console.log(res)
+                    if (res.data.data) {
+                        setContent({
+                            ...content,
+                            ...data,
+                        })
+                        setSaveSuccess(true)
+                        setTimeout(() => {
+                            setSaveSuccess(false)
+                        }, 2000)
+                    }
                 })
                 .catch(err => {
                     console.log(err)
                     if (err.response?.data?.errors) {
                         console.log(err.response.data.errors)
+                        let errorMessage = ''
+                        for (const key in err.response.data.errors) {
+                            errorMessage += err.response.data.errors[key]
+                        }
+                        setError(errorMessage)
                     } else {
                         setError(err)
                     }
+                    setTimeout(() => {
+                        setError(null)
+                    }, 2000)
                 })
         }
         let deleteContent = e => {
@@ -112,12 +161,22 @@ export default function EditContent() {
                     }
                 })
         }
-        const isQuiz = content.type === 'quiz'
+        const isQuiz = content.type === type.lessonTypes.quiz
         return (
             <AppLayout
                 header={
                     <h2 className="font-semibold text-xl leading-tight flex justify-between">
-                        Giga
+                        <input
+                            type="text"
+                            className="text-2xl font-bold text-gray-800 dark:text-gray-100 bg-transparent border-none focus:outline-none"
+                            value={content?.name}
+                            onChange={e => {
+                                setContent({
+                                    ...content,
+                                    name: e.target.value,
+                                })
+                            }}
+                        />
                         {/* Settings Dropdown */}
                         <div className="hidden sm:flex sm:items-center sm:ml-6">
                             <Dropdown
@@ -149,15 +208,6 @@ export default function EditContent() {
                                 <DropdownButton
                                     onClick={e => {
                                         e.preventDefault()
-                                        if (content.content !== doc) {
-                                            if (
-                                                !confirm(
-                                                    'You have unsaved changes. Are you sure you want to leave?',
-                                                )
-                                            ) {
-                                                return
-                                            }
-                                        }
                                         router.push(
                                             `/courses/${idCourse}/lessons/${idLesson}`,
                                         )
@@ -171,6 +221,12 @@ export default function EditContent() {
                 <Head>
                     <title>Laravel - Dashboard</title>
                 </Head>
+                <Toast
+                    show={saveSuccess}
+                    message="Saved successfully"
+                    color="success"
+                />
+                <Toast show={!!error} message={error} color="error" />
                 <div>
                     <main
                         className={`min-h-screen flex flex-col gap-2 dark:bg-gray-900`}>

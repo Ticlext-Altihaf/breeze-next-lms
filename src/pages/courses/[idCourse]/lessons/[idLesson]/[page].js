@@ -9,6 +9,8 @@ import Link from 'next/link'
 
 import { useAuth } from '@/hooks/auth'
 import Preview from '@/components/Markdown/Preview'
+import Dropdown from '@/components/Dropdown'
+import { DropdownButton } from '@/components/DropdownLink'
 
 const Course = () => {
     const [lesson, setLesson] = useState(null)
@@ -34,6 +36,11 @@ const Course = () => {
     }, [idLesson])
 
     function setPage(nextPage) {
+        //check next page exists
+        let maxPage = lesson?.contents?.length || 9999
+        if (nextPage > maxPage) {
+            nextPage = maxPage
+        }
         if (page !== nextPage) {
             router.push(
                 `/courses/${idCourse}/lessons/${idLesson}/${nextPage}`,
@@ -54,15 +61,15 @@ const Course = () => {
         if (input) {
             input.value = ''
         }
-        if (page < lesson.contents.length - 1) {
-            setPage(page + 1)
+        if (isFinalPage) {
+            router.push(`/courses/${idCourse}`)
         } else {
-            router.push(`/courses/${lesson.course.id}`)
+            setPage(page + 1)
         }
     }
 
     const isTheAuthor =
-        lesson && (lesson.course.author_id === user.id || user.is_admin)
+        lesson && user && (lesson.course.author_id === user.id || user.is_admin)
     const content = lesson && lesson.contents[page - 1]
     const isFinalPage = page === lesson?.contents?.length
     return (
@@ -74,24 +81,78 @@ const Course = () => {
                             <Link href={`/courses/${idCourse}`} passHref={true}>
                                 {lesson.name}
                             </Link>{' '}
-                            {content && ' - ' + content.name}
+                            {content && (
+                                <select
+                                    className="bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:focus:ring-gray-600 dark:focus:border-gray-600"
+                                    onChange={e => {
+                                        setPage(parseInt(e.target.value))
+                                    }}>
+                                    {lesson.contents.map((content, index) => (
+                                        <option
+                                            key={index}
+                                            value={index + 1}
+                                            selected={index + 1 === page}>
+                                            Page {index + 1} - {content.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
                         </div>
                     )}
 
-                    {content && isTheAuthor && (
-                        <Link
-                            href={`/courses/${idCourse}/lessons/${idLesson}/edit/${content.order_no}`}
-                            passHref={true}>
-                            Edit content
-                        </Link>
-                    )}
-                    {isTheAuthor && (
-                        <Link
-                            href={`/courses/${idCourse}/lessons/${idLesson}/create`}
-                            passHref={true}>
-                            Add content
-                        </Link>
-                    )}
+                    <div className="hidden sm:flex sm:items-center sm:ml-6">
+                        <Dropdown
+                            align="right"
+                            width="48"
+                            trigger={
+                                <button className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out">
+                                    <div>Menu</div>
+                                    <div className="ml-1">
+                                        <svg
+                                            className="fill-current h-4 w-4"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+                                    </div>
+                                </button>
+                            }>
+                            {isTheAuthor && (
+                                <DropdownButton
+                                    onClick={e => {
+                                        e.preventDefault()
+                                        router.push(
+                                            `/courses/${idCourse}/lessons/${idLesson}/create`,
+                                        )
+                                    }}>
+                                    Add content
+                                </DropdownButton>
+                            )}
+                            {content && isTheAuthor && (
+                                <DropdownButton
+                                    onClick={e => {
+                                        e.preventDefault()
+                                        router.push(
+                                            `/courses/${idCourse}/lessons/${idLesson}/edit/${content.order_no}`,
+                                        )
+                                    }}>
+                                    Edit content
+                                </DropdownButton>
+                            )}
+
+                            <DropdownButton
+                                onClick={e => {
+                                    e.preventDefault()
+                                    router.push(`/courses/${idCourse}`)
+                                }}>
+                                Exit
+                            </DropdownButton>
+                        </Dropdown>
+                    </div>
                 </h2>
             }>
             <Head>
@@ -155,7 +216,7 @@ const Course = () => {
                             {content.choices.map((answer, index) => (
                                 <button
                                     key={index}
-                                    className=" hover:bg-gray-200 text-white font-bold py-2 px-4 rounded disabled:opacity-50 xl:mt-8 mt-4 mr-4 dark:bg-gray-800 dark:text-white"
+                                    className=" hover:bg-gray-200 text-white font-bold py-2 px-4 rounded disabled:opacity-50 xl:mt-8 mt-4 mr-4 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                                     onClick={() => {
                                         onNext({
                                             type: 'quiz-multiple-choice',
