@@ -6,34 +6,36 @@ import { defaultKeymap } from '@codemirror/commands'
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
 import { languages } from '@codemirror/language-data'
 import { oneDark } from '@codemirror/theme-one-dark'
+import { useTheme } from 'next-themes'
 
 const useCodeMirror = props => {
     const refContainer = useRef(null)
     const [editorView, setEditorView] = useState()
     const { onChange } = props
-
+    const { resolvedTheme } = useTheme()
     useEffect(() => {
         if (!refContainer.current) return
+        const extension = [
+            basicSetup,
+            keymap.of(defaultKeymap),
+            markdown({
+                base: markdownLanguage,
+                codeLanguages: languages,
+                addKeymap: true,
+            }),
+            oneDark,
+            EditorView.lineWrapping,
+            EditorView.updateListener.of(update => {
+                if (update.changes) {
+                    // eslint-disable-next-line no-unused-expressions
+                    onChange && onChange(update.state)
+                }
+            }),
+        ]
 
         const startState = EditorState.create({
             doc: props.initialDoc,
-            extensions: [
-                basicSetup,
-                keymap.of(defaultKeymap),
-                markdown({
-                    base: markdownLanguage,
-                    codeLanguages: languages,
-                    addKeymap: true,
-                }),
-                oneDark,
-                EditorView.lineWrapping,
-                EditorView.updateListener.of(update => {
-                    if (update.changes) {
-                        // eslint-disable-next-line no-unused-expressions
-                        onChange && onChange(update.state)
-                    }
-                }),
-            ],
+            extensions: extension
         })
 
         const view = new EditorView({
