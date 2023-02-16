@@ -19,6 +19,29 @@ export default function EditContent() {
     const [error, setError] = useState(null)
     const [doc, setDoc] = useState(content?.content || '# Loading')
 
+    // prompt the user if they try and leave with unsaved changes
+    useEffect(() => {
+        const unsavedChanges = doc !== content?.content
+        const warningText =
+            'You have unsaved changes - are you sure you wish to leave this page?'
+        const handleWindowClose = e => {
+            if (!unsavedChanges) return
+            e.preventDefault()
+            return (e.returnValue = warningText)
+        }
+        const handleBrowseAway = () => {
+            if (!unsavedChanges) return
+            if (window.confirm(warningText)) return
+            router.events.emit('routeChangeError')
+            throw 'routeChange aborted.'
+        }
+        window.addEventListener('beforeunload', handleWindowClose)
+        router.events.on('routeChangeStart', handleBrowseAway)
+        return () => {
+            window.removeEventListener('beforeunload', handleWindowClose)
+            router.events.off('routeChangeStart', handleBrowseAway)
+        }
+    }, [doc])
     const handleDocChange = useCallback(newDoc => {
         setDoc(newDoc)
     }, [])

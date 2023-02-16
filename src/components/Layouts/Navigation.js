@@ -9,14 +9,26 @@ import { DropdownButton } from '@/components/DropdownLink'
 import { useAuth } from '@/hooks/auth'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useTheme } from 'next-themes'
 
 const Navigation = ({ user }) => {
     const router = useRouter()
-
+    const { theme, resolvedTheme, setTheme } = useTheme()
     const { logout } = useAuth()
-
+    const themeToEmoji = {
+        light: '☀️',
+        dark: '🌙',
+        system: '🌓',
+    }
     const [open, setOpen] = useState(false)
 
+    function toggleTheme(e) {
+        e.preventDefault()
+        const themes = ['light', 'dark', 'system']
+        const nextTheme = themes[(themes.indexOf(theme) + 1) % themes.length]
+
+        setTheme(nextTheme)
+    }
     return (
         <nav className="bg-white border-b border-gray-100 dark:bg-gray-800 dark:border-gray-700">
             {/* Primary Navigation Menu */}
@@ -78,6 +90,10 @@ const Navigation = ({ user }) => {
                                 </button>
                             }>
                             {/* Authentication */}
+                            <DropdownButton onClick={toggleTheme}>
+                                Toggle Theme{' '}
+                                {themeToEmoji[theme || resolvedTheme]}
+                            </DropdownButton>
                             <DropdownButton onClick={logout}>
                                 Logout
                             </DropdownButton>

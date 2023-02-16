@@ -82,7 +82,7 @@ const Course = () => {
                                             key={lesson.id}>
                                             <a
                                                 href={getLink(
-                                                    `/courses/${idCourse}/lessons/${lesson.id}`,
+                                                    `/courses/${idCourse}/lessons/${lesson.id}/1`,
                                                 )}
                                                 className="block px-6 py-2 border-b border-gray-200w-fulltransitionduration-500 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700">
                                                 {lesson.name}
