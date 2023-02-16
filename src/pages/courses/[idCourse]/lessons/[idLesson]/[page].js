@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import YoutubeIFrame from '@/components/YoutubeIFrame'
 
 import Link from 'next/link'
-
+import * as type from '@/lib/type'
 import { useAuth } from '@/hooks/auth'
 import Preview from '@/components/Markdown/Preview'
 import Dropdown from '@/components/Dropdown'
@@ -173,24 +173,19 @@ const Course = () => {
             )}
             {content && (
                 <div className="mt-24 divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0 flex flex-col justify-between xl:px-72 md:px-24 sm:px-12 px-4">
-                    {content.type === 'content' && (
+                    {content.type === type.lessonTypes.text && (
                         <Preview doc={content.text} className="mt-8" />
                     )}
-                    {content.type === 'attachment' && (
-                        <a href={content.text} target="_blank" rel="noreferrer">
-                            {content.text}
-                        </a>
-                    )}
-                    {content.type === 'video' && (
+                    {content.type === type.lessonTypes.youtube_video && (
                         <YoutubeIFrame videoId={content.video_id} />
                     )}
-                    {content.type === 'quiz' && <Preview doc={content.text} />}
+                    {content.type === type.lessonTypes.quiz && <Preview doc={content.text} />}
                     {content.is_true_false && (
                         <div className="flex justify-center xl:mt-8 mt-4">
                             <button
                                 onClick={() =>
                                     onNext({
-                                        type: 'quiz-true-false',
+                                        type: type.quizType.true_false,
                                         quiz_id: content.id,
                                         answer_id: 1,
                                     })
@@ -201,7 +196,7 @@ const Course = () => {
                             <button
                                 onClick={() =>
                                     onNext({
-                                        type: 'quiz-true-false',
+                                        type: type.quizType.true_false,
                                         quiz_id: content.id,
                                         answer_id: 0,
                                     })
@@ -219,7 +214,7 @@ const Course = () => {
                                     className=" hover:bg-gray-200 text-white font-bold py-2 px-4 rounded disabled:opacity-50 xl:mt-8 mt-4 mr-4 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                                     onClick={() => {
                                         onNext({
-                                            type: 'quiz-multiple-choice',
+                                            type: type.quizType.multiple_choice,
                                             quiz_id: content.id,
                                             answer_id: answer.id,
                                         })
@@ -242,14 +237,14 @@ const Course = () => {
                     {!content.is_multiple_choice && !content.is_true_false && (
                         <button
                             onClick={() => {
-                                if (content.type === 'quiz') {
+                                if (content.type === type.lessonTypes.quiz) {
                                     const answer = document.getElementById(
                                         'input',
                                     )
                                     const text = answer.value
                                     if (!text) return
                                     onNext({
-                                        type: 'quiz-fill-in-the-blank',
+                                        type: type.quizType.fill_in_the_blank,
                                         quiz_id: content.id,
                                         answer: text,
                                     })
