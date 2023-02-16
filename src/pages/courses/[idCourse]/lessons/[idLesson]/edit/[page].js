@@ -54,6 +54,42 @@ export default function EditContent() {
         }
     }, [page])
     if (content) {
+        let saveContent = e => {
+            e.preventDefault()
+            axios
+                .put(`/contents/${content.id}`, {
+                    text: doc,
+                })
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    console.log(err)
+                    if (err.response?.data?.errors) {
+                        console.log(err.response.data.errors)
+                    } else {
+                        setError(err)
+                    }
+                })
+        }
+        let deleteContent = e => {
+            e.preventDefault()
+            axios
+                .delete(`/contents/${content.id}`)
+                .then(res => {
+                    console.log(res)
+                    router.push(`/courses/${idCourse}/lessons/${idLesson}`)
+                })
+                .catch(err => {
+                    console.log(err)
+                    if (err.response?.data?.errors) {
+                        console.log(err.response.data.errors)
+                    } else {
+                        setError(err)
+                    }
+                })
+        }
+        const isQuiz = content.type === 'quiz'
         return (
             <AppLayout
                 header={
@@ -65,8 +101,6 @@ export default function EditContent() {
                                 align="right"
                                 width="48"
                                 trigger={
-
-
                                     <button className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition duration-150 ease-in-out">
                                         <div>Menu</div>
                                         <div className="ml-1">
@@ -83,16 +117,36 @@ export default function EditContent() {
                                         </div>
                                     </button>
                                 }>
-                                <DropdownButton>Save</DropdownButton>
-                                <DropdownButton>Delete</DropdownButton>
-                                <DropdownButton>Exit</DropdownButton>
+                                <DropdownButton onClick={saveContent}>
+                                    Save
+                                </DropdownButton>
+                                <DropdownButton onClick={deleteContent}>
+                                    Delete
+                                </DropdownButton>
+                                <DropdownButton
+                                    onClick={e => {
+                                        e.preventDefault()
+                                        if (content.content !== doc) {
+                                            if (
+                                                !confirm(
+                                                    'You have unsaved changes. Are you sure you want to leave?',
+                                                )
+                                            ) {
+                                                return
+                                            }
+                                        }
+                                        router.push(
+                                            `/courses/${idCourse}/lessons/${idLesson}`,
+                                        )
+                                    }}>
+                                    Exit
+                                </DropdownButton>
                             </Dropdown>
                         </div>
                     </h2>
                 }>
                 <Head>
                     <title>Laravel - Dashboard</title>
-
                 </Head>
                 <div>
                     <main
