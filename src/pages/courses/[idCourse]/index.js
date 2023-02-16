@@ -62,7 +62,6 @@ const Course = () => {
             <Head>
                 <title>Laravel - Dashboard</title>
             </Head>
-
             {loading && <div>Loading...</div>}
             {error && <div>Error: {error.message}</div>}
             <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 flex justify-center">

@@ -1,5 +1,8 @@
 .reactMarkDown {
 }
+.reactMarkDown pre {
+    background-color: transparent;
+}
 
 .reactMarkDown ul {
     margin-top: 1em;

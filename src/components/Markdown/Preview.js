@@ -1,10 +1,7 @@
 import remarkGfm from 'remark-gfm'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import {
-    ghcolors,
-    vscDarkPlus,
-} from 'react-syntax-highlighter/dist/cjs/styles/prism'
-import 'github-markdown-css/github-markdown.css'
+import * as prism from 'react-syntax-highlighter/dist/cjs/styles/prism'
+
 import ReactMarkdown from 'react-markdown'
 import CopyBtn from './copy-btn'
 import styles from '@/styles/react-markdown.module.css'
@@ -15,14 +12,12 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import remarkMermaid from 'remark-mermaidjs'
 const Preview = props => {
-    const { theme, resolvedTheme, forcedTheme } = useTheme()
-    console.log(theme, resolvedTheme, forcedTheme)
+    const { resolvedTheme } = useTheme()
     return (
-        <div className="preview markdown-body">
+        <div className="prose dark:prose-invert markdown-body reactMarkDown max-w-none">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath, remarkMermaid]}
                 rehypePlugins={[rehypeKatex]}
-
                 className={styles.reactMarkDown}
                 components={{
                     pre({ node, ...props }) {
@@ -42,11 +37,12 @@ const Preview = props => {
                                 <SyntaxHighlighter
                                     style={
                                         resolvedTheme === 'dark'
-                                            ? vscDarkPlus
-                                            : ghcolors
+                                            ? prism.a11yDark
+                                            : prism.ghcolors
                                     }
                                     language={match[1]}
                                     PreTag="div"
+
                                     {...props}>
                                     {String(children).replace(/\n$/, '')}
                                 </SyntaxHighlighter>

@@ -78,6 +78,8 @@ const Course = () => {
             <Head>
                 <title>Laravel - Dashboard</title>
             </Head>
+     
+
             {lesson && lesson.contents.length === 0 && (
                 <div className="mt-24 text-center divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0 flex flex-col justify-between xl:px-72 md:px-24 sm:px-12 px-4">
                     <h1 className="text-2xl font-bold">No content</h1>
@@ -130,7 +132,7 @@ const Course = () => {
                             {content.choices.map((answer, index) => (
                                 <button
                                     key={index}
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 xl:mt-8 mt-4 mr-4"
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 xl:mt-8 mt-4 mr-4 dark:bg-gray-800 dark:text-white"
                                     onClick={() => {
                                         onNext({
                                             type: 'quiz-multiple-choice',
