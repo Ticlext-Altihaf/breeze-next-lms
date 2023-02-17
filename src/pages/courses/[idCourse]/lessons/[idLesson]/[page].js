@@ -159,11 +159,6 @@ const Course = () => {
                 <title>Laravel - Dashboard</title>
             </Head>
 
-            {lesson && lesson.contents.length === 0 && (
-                <div className="mt-24 text-center divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0 flex flex-col justify-between xl:px-72 md:px-24 sm:px-12 px-4">
-                    <h1 className="text-2xl font-bold">No content</h1>
-                </div>
-            )}
             {loading && <div>Loading...</div>}
             {error && <div>Error: {error.message}</div>}
             {!content && (
@@ -179,7 +174,9 @@ const Course = () => {
                     {content.type === type.lessonTypes.youtube_video && (
                         <YoutubeIFrame videoId={content.video_id} />
                     )}
-                    {content.type === type.lessonTypes.quiz && <Preview doc={content.text} />}
+                    {content.type === type.lessonTypes.quiz && (
+                        <Preview doc={content.text} />
+                    )}
                     {content.is_true_false && (
                         <div className="flex justify-center xl:mt-8 mt-4">
                             <button

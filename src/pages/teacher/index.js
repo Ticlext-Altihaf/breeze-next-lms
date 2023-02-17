@@ -34,12 +34,12 @@ export default function TeacherHome() {
     return (
         <AppLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight flex justify-between">
+                <h2 className="font-semibold text-xl leading-tight flex justify-between">
                     Teacher - Dashboard
                     <Link
                         href="/courses/create"
                         passHref={true}
-                        className="font-semibold text-xl text-gray-800 leading-tight">
+                        className="font-semibold text-xl leading-tight">
                         Create a course
                     </Link>
                 </h2>
@@ -51,7 +51,7 @@ export default function TeacherHome() {
             {error && <div>Error: {error.message}</div>}
             {courses && courses.length === 0 && (
                 <div className="p-10 flex justify-center">
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                    <h2 className="font-semibold text-xl leading-tight">
                         You have no courses yet.
                     </h2>
                 </div>
@@ -74,7 +74,7 @@ export default function TeacherHome() {
                                     <div className="font-bold text-xl mb-2">
                                         {course.name}
                                     </div>
-                                    <p className="text-gray-700 text-base">
+                                    <p className="text-gray-700 text-base dark:text-gray-200">
                                         {course.description}
                                     </p>
                                 </div>

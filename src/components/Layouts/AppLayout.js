@@ -16,7 +16,9 @@ const AppLayout = ({ header, children }) => {
             </header>
 
             {/* Page Content */}
-            <main>{children}</main>
+            <main className="flex-1 overflow-x-hidden overflow-y-auto text-gray-800 dark:text-gray-300">
+                {children}
+            </main>
         </div>
     )
 }

@@ -50,7 +50,7 @@ const Dashboard = () => {
                                     />
                                 )}
                                 <div className="px-6 py-4">
-                                    <div className="font-bold text-xl mb-2">
+                                    <div className="font-bold text-xl mb-2 text-gray-700 dark:text-gray-200">
                                         {course.name}
                                     </div>
                                     <p className="text-gray-700 text-base dark:text-gray-200">

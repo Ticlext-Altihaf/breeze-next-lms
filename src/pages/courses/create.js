@@ -137,7 +137,7 @@ export default function CreateCourse() {
             <section className=" py-1 bg-blueGray-50">
                 <div className="w-full lg:w-8/12 px-4 mx-auto mt-6">
                     <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
-                        <div className="rounded-t bg-white mb-0 px-6 py-6">
+                        <div className="rounded-t bg-white mb-0 px-6 py-6 dark:bg-gray-800">
                             <div className="text-center flex justify-between">
                                 <h6 className="text-blueGray-700 text-xl font-bold">
                                     Create Course
@@ -159,7 +159,7 @@ export default function CreateCourse() {
                                             </label>
                                             <input
                                                 type="text"
-                                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 dark:bg-gray-700 dark:text-gray-300"
                                                 name={'name'}
                                             />
                                         </div>
@@ -173,7 +173,7 @@ export default function CreateCourse() {
                                             </label>
                                             <input
                                                 type="text"
-                                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                                className="dark:bg-gray-700 dark:text-gray-300 border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                                                 name={'description'}
                                             />
                                         </div>
@@ -220,15 +220,15 @@ export default function CreateCourse() {
                                         </div>
                                         <label
                                             className={
-                                                'flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none' +
+                                                'flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:border-gray-500' +
                                                 (dragActive
-                                                    ? ' border-blue-500'
+                                                    ? ' border-blue-500 dark:border-blue-400'
                                                     : '')
                                             }>
-                                            <span className="flex items-center space-x-2">
+                                            <span className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    className="w-6 h-6 text-gray-600"
+                                                    className="w-6 h-6 "
                                                     fill="none"
                                                     viewBox="0 0 24 24"
                                                     stroke="currentColor"
@@ -240,15 +240,15 @@ export default function CreateCourse() {
                                                     />
                                                 </svg>
                                                 {selectedFile ? (
-                                                    <span className="font-medium text-gray-600">
+                                                    <span className="font-medium">
                                                         {selectedFile.name}
                                                     </span>
                                                 ) : (
-                                                    <span className="font-medium text-gray-600">
+                                                    <span className="font-medium">
                                                         {
                                                             'Drop files to Attach, or '
                                                         }
-                                                        <span className="text-blue-600 underline">
+                                                        <span className="text-blue-600 underline dark:text-blue-400">
                                                             browse
                                                         </span>
                                                     </span>

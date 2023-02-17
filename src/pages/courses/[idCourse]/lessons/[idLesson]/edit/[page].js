@@ -221,7 +221,7 @@ export default function EditContent() {
                                     onClick={e => {
                                         e.preventDefault()
                                         router.push(
-                                            `/courses/${idCourse}/lessons/${idLesson}`,
+                                            `/courses/${idCourse}/lessons/${idLesson}/${page}`,
                                         )
                                     }}>
                                     Exit
