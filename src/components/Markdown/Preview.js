@@ -37,7 +37,7 @@ const Preview = props => {
                                 <SyntaxHighlighter
                                     style={
                                         resolvedTheme === 'dark'
-                                            ? prism.a11yDark
+                                            ? prism.atomDark
                                             : prism.ghcolors
                                     }
                                     language={match[1]}

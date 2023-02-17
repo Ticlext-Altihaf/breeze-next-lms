@@ -18,12 +18,16 @@ export default function EditContent() {
     const { page: pageStr, idLesson, idCourse } = router.query
     const page = parseInt(pageStr + '')
     const [lesson, setLesson] = useState(null)
-    const [content, setContent] = useState(lesson?.contents[page - 1] || null)
+    var [content, setContent] = useState(lesson?.contents[page - 1] || null)
     const [error, setError] = useState(null)
     const [saveSuccess, setSaveSuccess] = useState(false)
     const [doc, setDoc] = useState(content?.text)
     if (!doc && content?.text) {
         setDoc(content?.text)
+    }
+    //check if error not string
+    if (typeof error !== 'string' && error?.message) {
+        setError(error + '')
     }
     console.log('doc', doc)
     console.log('content?.text', content?.text)
@@ -33,18 +37,25 @@ export default function EditContent() {
         const selection = lesson?.contents[page - 1]
         setContent(selection)
     }
+    const unsavedChanges = () => {
+        if (!content) return false
+        return content.text !== doc
+    }
     // prompt the user if they try and leave with unsaved changes
     useEffect(() => {
-        const unsavedChanges = doc !== content?.text
         const warningText =
             'You have unsaved changes - are you sure you wish to leave this page?'
         const handleWindowClose = e => {
-            if (!unsavedChanges) return
+            const unsaved = unsavedChanges()
+            console.log('unsaved', unsaved)
+            if (!unsaved) return
             e.preventDefault()
             return (e.returnValue = warningText)
         }
         const handleBrowseAway = () => {
-            if (!unsavedChanges) return
+            const unsaved = unsavedChanges()
+            console.log('unsaved', unsaved)
+            if (!unsaved) return
             if (window.confirm(warningText)) return
             router.events.emit('routeChangeError')
             throw 'routeChange aborted.'
@@ -55,7 +66,8 @@ export default function EditContent() {
             window.removeEventListener('beforeunload', handleWindowClose)
             router.events.off('routeChangeStart', handleBrowseAway)
         }
-    }, [doc])
+    }, [content, doc, content?.text])
+
     const handleDocChange = useCallback(newDoc => {
         setDoc(newDoc)
     }, [])
@@ -226,7 +238,7 @@ export default function EditContent() {
                     message="Saved successfully"
                     color="success"
                 />
-                <Toast show={!!error} message={error} color="error" />
+                <Toast show={error} message={error} color="error" />
                 <div>
                     <main
                         className={`min-h-screen flex flex-col gap-2 dark:bg-gray-900`}>
