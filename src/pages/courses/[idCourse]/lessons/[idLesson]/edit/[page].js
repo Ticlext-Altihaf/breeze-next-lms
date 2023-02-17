@@ -159,7 +159,7 @@ export default function EditContent() {
         let deleteContent = e => {
             e.preventDefault()
             axios
-                .delete(`/contents/${content.id}`)
+                .delete(`/contents/${content.id}?type=${content.type}`)
                 .then(res => {
                     console.log(res)
                     router.push(`/courses/${idCourse}/lessons/${idLesson}`)

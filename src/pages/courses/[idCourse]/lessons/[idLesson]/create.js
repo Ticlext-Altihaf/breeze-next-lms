@@ -7,7 +7,7 @@ import Link from 'next/link'
 import Head from 'next/head'
 import Editor from '@/components/Markdown/Editor'
 import Preview from '@/components/Markdown/Preview'
-
+import * as libType from '@/lib/type'
 export default function CreateContent(content) {
     const { user } = useAuth({ middleware: 'auth' })
     const router = useRouter()
@@ -18,7 +18,7 @@ export default function CreateContent(content) {
 
     const [text, setText] = useState('')
     const [title, setTitle] = useState('')
-    const [type, setType] = useState('youtube')
+    const [type, setType] = useState(libType.lessonTypes.youtube_video)
 
     const { idCourse, idLesson } = router.query
 
@@ -73,10 +73,14 @@ export default function CreateContent(content) {
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 sm:text-sm border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
                     value={type}
                     onChange={e => setType(e.target.value)}>
-                    <option value="markdown">Markdown</option>
-                    <option value="youtube">Youtube Video</option>
+                    {Object.keys(libType.lessonTypes).map((key, index) => (
+                        <option key={index} value={libType.lessonTypes[key]}>
+                            {libType.lessonTypes[key]}
+                        </option>
+                    ))}
+
                 </select>
-                {type === 'youtube' && (
+                {type === libType.lessonTypes.youtube_video && (
                     <input
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 sm:text-sm border-gray-30 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
                         type="text"
@@ -85,7 +89,7 @@ export default function CreateContent(content) {
                         onChange={e => setText(e.target.value)}
                     />
                 )}
-                {type === 'markdown' && (
+                {type === libType.lessonTypes.text && (
                     <div className="flex flex-1 w-full gap-4">
                         <Editor
                             initialDoc={text}
@@ -108,7 +112,7 @@ export default function CreateContent(content) {
                             return
                         }
                         if (
-                            type === 'youtube' &&
+                            type === libType.lessonTypes.youtube_video &&
                             !text.startsWith(
                                 'https://www.youtube.com/watch?v=',
                             ) &&
@@ -127,8 +131,9 @@ export default function CreateContent(content) {
                                 lesson_id: idLesson,
                             })
                             .then(res => {
+                                console.log(res)
                                 router.push(
-                                    `/courses/${idCourse}/lessons/${idLesson}`,
+                                    `/courses/${idCourse}/lessons/${idLesson}/${res.data.data.order_no}`,
                                 )
                             })
                             .catch(err => {

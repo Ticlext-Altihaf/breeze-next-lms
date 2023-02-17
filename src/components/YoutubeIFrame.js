@@ -27,7 +27,7 @@ const VideoIframe = props => {
             ? iframeRef.current.offsetWidth * 0.5625
             : defaultHeight
         return setVideoHeight(Math.floor(height * ratio))
-    }, [])
+    }, [videoHeight])
 
     useEffect(() => {
         window.addEventListener('resize', handleChangeVideoWidth)

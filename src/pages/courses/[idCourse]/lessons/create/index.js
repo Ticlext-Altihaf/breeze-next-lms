@@ -5,11 +5,6 @@ import axios from '@/lib/axios'
 import AppLayout from '@/components/Layouts/AppLayout'
 import Link from 'next/link'
 import Head from 'next/head'
-import '@uiw/react-md-editor/markdown-editor.css'
-import '@uiw/react-markdown-preview/markdown.css'
-import dynamic from 'next/dynamic'
-
-const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
 export default function CreateLesson() {
     const { user } = useAuth({ middleware: 'auth' })
