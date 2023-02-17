@@ -78,7 +78,6 @@ export default function CreateContent(content) {
                             {libType.lessonTypes[key]}
                         </option>
                     ))}
-
                 </select>
                 {type === libType.lessonTypes.youtube_video && (
                     <input

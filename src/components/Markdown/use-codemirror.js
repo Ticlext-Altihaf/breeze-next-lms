@@ -35,7 +35,7 @@ const useCodeMirror = props => {
 
         const startState = EditorState.create({
             doc: props.initialDoc,
-            extensions: extension
+            extensions: extension,
         })
 
         const view = new EditorView({

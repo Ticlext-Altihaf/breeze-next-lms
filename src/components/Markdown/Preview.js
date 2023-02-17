@@ -42,7 +42,6 @@ const Preview = props => {
                                     }
                                     language={match[1]}
                                     PreTag="div"
-
                                     {...props}>
                                     {String(children).replace(/\n$/, '')}
                                 </SyntaxHighlighter>
