@@ -175,63 +175,13 @@ const Course = () => {
                         <YoutubeIFrame videoId={content.video_id} />
                     )}
                     {content.type === type.lessonTypes.quiz && (
-                        <Preview doc={content.text} />
+                        <Quiz
+                            content={content}
+                            onNext={onNext}
+                            isFinalPage={isFinalPage}
+                        />
                     )}
-                    {content.is_true_false && (
-                        <div className="flex justify-center xl:mt-8 mt-4">
-                            <button
-                                onClick={() =>
-                                    onNext({
-                                        type: type.quizType.true_false,
-                                        quiz_id: content.id,
-                                        answer_id: 1,
-                                    })
-                                }
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">
-                                True
-                            </button>
-                            <button
-                                onClick={() =>
-                                    onNext({
-                                        type: type.quizType.true_false,
-                                        quiz_id: content.id,
-                                        answer_id: 0,
-                                    })
-                                }
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                False
-                            </button>
-                        </div>
-                    )}
-                    {content.is_multiple_choice && (
-                        <div className="flex justify-center xl:mt-8 mt-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5">
-                            {content.choices.map((answer, index) => (
-                                <button
-                                    key={index}
-                                    className=" hover:bg-gray-200 text-white font-bold py-2 px-4 rounded disabled:opacity-50 xl:mt-8 mt-4 mr-4 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
-                                    onClick={() => {
-                                        onNext({
-                                            type: type.quizType.multiple_choice,
-                                            quiz_id: content.id,
-                                            answer_id: answer.id,
-                                        })
-                                    }}>
-                                    <Preview doc={answer.text} />
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                    {content.is_fill_in_the_blank && (
-                        <div className="flex justify-center xl:mt-8 mt-4 w-full">
-                            <input
-                                className="border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:text-white dark:border-gray-700"
-                                id="input"
-                                name="answer"
-                                type="text"
-                            />
-                        </div>
-                    )}
-                    {!content.is_multiple_choice && !content.is_true_false && (
+                    {!content.is_true_false && !content.is_multiple_choice && (
                         <button
                             onClick={() => {
                                 if (content.type === type.lessonTypes.quiz) {
@@ -265,6 +215,79 @@ const Course = () => {
                 </div>
             )}
         </AppLayout>
+    )
+}
+
+//modularize quiz
+export const Quiz = ({ content, onNext, isFinalPage }) => {
+    return (
+        <>
+            {content.text && (
+                <Preview doc={content.text} className="mt-8" />
+            )}
+            {content.is_true_false && (
+                <div className="flex justify-center xl:mt-8 mt-4">
+                    <button
+                        onClick={() =>
+                            onNext({
+                                type: type.quizType.true_false,
+                                quiz_id: content.id,
+                                answer_id: 1,
+                            })
+                        }
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">
+                        True
+                    </button>
+                    <button
+                        onClick={() =>
+                            onNext({
+                                type: type.quizType.true_false,
+                                quiz_id: content.id,
+                                answer_id: 0,
+                            })
+                        }
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        False
+                    </button>
+                </div>
+            )}
+            {content.is_multiple_choice && (
+                <div className="flex justify-center xl:mt-8 mt-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5">
+                    {content.choices.map((answer, index) => (
+                        <button
+                            key={index}
+                            className=" hover:bg-gray-200 text-white font-bold py-2 px-4 rounded disabled:opacity-50 xl:mt-8 mt-4 mr-4 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                            onClick={() => {
+                                onNext({
+                                    type: type.quizType.multiple_choice,
+                                    quiz_id: content.id,
+                                    answer_id: answer.id,
+                                })
+                            }}>
+                            <Preview doc={answer.text} />
+                        </button>
+                    ))}
+                </div>
+            )}
+            {content.is_fill_in_the_blank && (
+                <div className="flex justify-center xl:mt-8 mt-4 w-full">
+                    <input
+                        className="border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:text-white dark:border-gray-700"
+                        id="input"
+                        name="answer"
+                        type="text"
+                        onSubmit={e => {
+                            e.preventDefault()
+                            onNext({
+                                type: type.quizType.fill_in_the_blank,
+                                quiz_id: content.id,
+                                answer: e.target.value,
+                            })
+                        }}
+                    />
+                </div>
+            )}
+        </>
     )
 }
 

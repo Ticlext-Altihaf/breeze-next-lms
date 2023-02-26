@@ -107,6 +107,8 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         )
             router.push(redirectIfAuthenticated)
         if (middleware === 'auth' && error) logout()
+        if (middleware === 'admin' && !user?.is_admin) router.push('/')
+        if (middleware === 'teacher' && !user?.is_teacher) router.push('/')
     }, [user, error])
 
     return {
