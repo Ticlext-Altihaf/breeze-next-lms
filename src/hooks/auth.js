@@ -3,7 +3,7 @@ import axios from '@/lib/axios'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
+export const useAuth = ({ middleware, redirectIfAuthenticated = '/' } = {}) => {
     const router = useRouter()
 
     const { data: user, error, mutate } = useSWR('/api/user', () =>
@@ -32,6 +32,16 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
                 setErrors(error.response.data.errors)
             })
+    }
+
+    const isTeacher = lesson => {
+        if (!user) return false
+        if (user.is_admin) return true
+        if (!lesson || !lesson.author) return false
+        if (lesson.author.id === user.id && user.is_teacher) {
+            return true
+        }
+        return false
     }
 
     const login = async ({ setErrors, setStatus, ...props }) => {
@@ -124,5 +134,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
         resetPassword,
         resendEmailVerification,
         logout,
+        isTeacher,
     }
 }

@@ -53,7 +53,7 @@ const Navigation = ({ user }) => {
                                 <NavLink
                                     href="/teacher"
                                     active={router.pathname === '/teacher'}>
-                                    Teacher
+                                    Mentor
                                 </NavLink>
                             )}
                             {user && user.is_admin && (

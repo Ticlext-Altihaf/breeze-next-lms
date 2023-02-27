@@ -74,16 +74,17 @@ const Course = () => {
     const isFinalPage = page === lesson?.contents?.length
     return (
         <AppLayout
+            user={user}
             header={
                 <h2 className="font-semibold text-xl leading-tight flex justify-between">
                     {lesson && (
                         <div>
                             <Link href={`/courses/${idCourse}`} passHref={true}>
-                                {lesson.name}
-                            </Link>{' '}
+                                {lesson.name} {content ? ' - ' : ''}
+                            </Link>
                             {content && (
                                 <select
-                                    className="bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:focus:ring-gray-600 dark:focus:border-gray-600"
+                                    className="bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:focus:ring-gray-600 dark:focus:border-gray-600 dark:placeholder-gray-400 w-96"
                                     onChange={e => {
                                         setPage(parseInt(e.target.value))
                                     }}>

@@ -9,7 +9,7 @@ import Preview from '@/components/Markdown/Preview'
 import * as libType from '@/lib/type'
 
 export default function CreateContent(content) {
-    const { user } = useAuth({ middleware: 'auth' })
+    const { user, isTeacher } = useAuth({ middleware: 'teacher' })
     const router = useRouter()
 
     const [error, setError] = useState(null)

@@ -1,9 +1,7 @@
 import Navigation from '@/components/Layouts/Navigation'
 import { useAuth } from '@/hooks/auth'
 
-const AppLayout = ({ header, children }) => {
-    const { user } = useAuth({ middleware: 'auth' })
-
+const AppLayout = ({ header, children, user }) => {
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col dark:bg-gray-900">
             <Navigation user={user} />

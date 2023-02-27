@@ -4,6 +4,7 @@ import axios from '@/lib/axios'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useAuth } from '@/hooks/auth'
 
 function SubjectCard(props) {
     return (
@@ -30,6 +31,7 @@ const Course = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const router = useRouter()
+    const { user, isTeacher } = useAuth({ middleware: 'auth' })
     const { idCourse } = router.query
     const getLink = path => `${router.basePath}${path}`
     const fetchCourse = async () => {
@@ -48,15 +50,19 @@ const Course = () => {
     }, [idCourse])
     return (
         <AppLayout
+            user={user}
             header={
                 <h2 className="font-semibold text-xl leading-tight flex justify-between">
                     {course && course.name}
-                    <Link
-                        href={`/courses/${idCourse}/lessons/create`}
-                        passHref={true}
-                        className="font-semibold text-xl leading-tight">
-                        Create a lesson
-                    </Link>
+
+                    {isTeacher(course) && (
+                        <Link
+                            href={`/courses/${idCourse}/lessons/create`}
+                            passHref={true}
+                            className="font-semibold text-xl leading-tight">
+                            Create a lesson
+                        </Link>
+                    )}
                 </h2>
             }>
             <Head>

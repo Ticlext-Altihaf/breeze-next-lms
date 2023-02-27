@@ -9,6 +9,7 @@ export default function AdminDashboard() {
     const [error, setError] = useState(null)
     return (
         <AppLayout
+            user={user}
             header={
                 <h2 className="font-semibold text-xl leading-tight flex justify-between">
                     Admin - Dashboard
