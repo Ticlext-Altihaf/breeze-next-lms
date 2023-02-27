@@ -6,7 +6,7 @@ const CoursesGrid = ({ courses }) => {
             {courses.map(course => (
                 <div className="w-full p-4" key={course.id}>
                     <a
-                        href=""
+                        href={`/courses/${course.id}`}
                         className="c-card block bg-white shadow-md hover:shadow-xl rounded-lg overflow-hidden dark:bg-gray-800">
                         <div className="relative pb-48 overflow-hidden">
                             <img
