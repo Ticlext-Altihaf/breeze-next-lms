@@ -92,9 +92,14 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     const logout = async () => {
         if (!error) {
-            await axios.post('/logout').then(() => mutate())
+            try {
+                await axios.post('/logout').then(() => mutate())
+            } catch (error) {
+                /* empty */
+            }
         }
 
+        //use window.location instead of router.push to force reload
         window.location.pathname = '/login'
     }
 

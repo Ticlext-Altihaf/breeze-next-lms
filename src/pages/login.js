@@ -50,7 +50,7 @@ const Login = () => {
             <AuthCard
                 logo={
                     <Link href="/">
-                        <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
+                        <ApplicationLogo className="w-20 h-20 fill-current text-gray-500 dark:text-gray-400" />
                     </Link>
                 }>
                 {/* Session Status */}
@@ -103,26 +103,26 @@ const Login = () => {
                                 id="remember_me"
                                 type="checkbox"
                                 name="remember"
-                                className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:focus:ring-gray-700"
                                 onChange={event =>
                                     setShouldRemember(event.target.checked)
                                 }
                             />
 
-                            <span className="ml-2 text-sm text-gray-600">
+                            <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
                                 Remember me
                             </span>
                         </label>
                     </div>
                     <Link
                         href="/register"
-                        className="underline text-sm text-gray-600 hover:text-gray-900">
+                        className="underline text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
                         Register
                     </Link>
                     <div className="flex items-center justify-end mt-4">
                         <Link
                             href="/forgot-password"
-                            className="underline text-sm text-gray-600 hover:text-gray-900">
+                            className="underline text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300">
                             Forgot your password?
                         </Link>
 

@@ -3,11 +3,13 @@ import Head from 'next/head'
 import axios from '@/lib/axios'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { useAuth } from '@/hooks/auth'
 
 const Dashboard = () => {
     const [courses, setCourses] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const { user } = useAuth({ middleware: 'auth' })
     const router = useRouter()
     const getLink = path => `${router.basePath}${path}`
     const fetchCourses = async () => {
@@ -41,7 +43,7 @@ const Dashboard = () => {
                         <a
                             href={getLink(`/courses/${course.id}`)}
                             key={course.id}>
-                            <div className="max-w-sm rounded overflow-hidden shadow-lg">
+                            <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white dark:bg-gray-800">
                                 {course.image_url && (
                                     <img
                                         className="w-full"
@@ -60,7 +62,7 @@ const Dashboard = () => {
                                 <div className="px-6 pt-4 pb-2">
                                     {course.categories.map(category => (
                                         <span
-                                            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 dark:bg-gray-800 dark:text-gray-200"
+                                            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 dark:bg-gray-700 dark:text-gray-200"
                                             key={category.id}>
                                             {category.name}
                                         </span>

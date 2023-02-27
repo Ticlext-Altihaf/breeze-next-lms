@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import axios from '@/lib/axios'
 import AppLayout from '@/components/Layouts/AppLayout'
-import Link from 'next/link'
 import Head from 'next/head'
 
 const Tag = props => <span className="tag" {...props} />

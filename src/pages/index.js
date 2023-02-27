@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/auth'
-import { useRouter } from 'next/router'
 
 export default function Home() {
     const { user } = useAuth({

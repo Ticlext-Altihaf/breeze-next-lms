@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from 'react'
+import React from 'react'
 import { MdOutlineContentCopy } from 'react-icons/md'
 
 const CopyBtn = ({ children, codeText }) => {

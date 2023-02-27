@@ -1,9 +1,7 @@
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import Image from 'next/image'
-import { useState, useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import * as type from '@/lib/type'
-import CreateContent from '@/pages/courses/[idCourse]/lessons/[idLesson]/create'
 
 import axios from '@/lib/axios'
 import Link from 'next/link'
@@ -13,6 +11,7 @@ import Preview from '@/components/Markdown/Preview'
 import Dropdown from '@/components/Dropdown'
 import { DropdownButton } from '@/components/DropdownLink'
 import Toast from '@/components/Toast'
+
 export default function EditContent() {
     const router = useRouter()
     const { page: pageStr, idLesson, idCourse } = router.query

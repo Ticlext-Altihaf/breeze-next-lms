@@ -38,7 +38,7 @@ const Register = () => {
             <AuthCard
                 logo={
                     <Link href="/">
-                        <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
+                        <ApplicationLogo className="w-20 h-20 fill-current text-gray-500 dark:text-gray-400" />
                     </Link>
                 }>
                 <form onSubmit={submitForm}>
@@ -50,7 +50,7 @@ const Register = () => {
                             id="name"
                             type="text"
                             value={name}
-                            className="block mt-1 w-full"
+                            className="block mt-1 w-full dark:bg-gray-700"
                             onChange={event => setName(event.target.value)}
                             required
                             autoFocus
@@ -67,7 +67,7 @@ const Register = () => {
                             id="email"
                             type="email"
                             value={email}
-                            className="block mt-1 w-full"
+                            className="block mt-1 w-full dark:bg-gray-700"
                             onChange={event => setEmail(event.target.value)}
                             required
                         />
@@ -83,7 +83,7 @@ const Register = () => {
                             id="password"
                             type="password"
                             value={password}
-                            className="block mt-1 w-full"
+                            className="block mt-1 w-full dark:bg-gray-700"
                             onChange={event => setPassword(event.target.value)}
                             required
                             autoComplete="new-password"
@@ -105,7 +105,7 @@ const Register = () => {
                             id="passwordConfirmation"
                             type="password"
                             value={passwordConfirmation}
-                            className="block mt-1 w-full"
+                            className="block mt-1 w-full dark:bg-gray-700"
                             onChange={event =>
                                 setPasswordConfirmation(event.target.value)
                             }
@@ -121,7 +121,7 @@ const Register = () => {
                     <div className="flex items-center justify-end mt-4">
                         <Link
                             href="/login"
-                            className="underline text-sm text-gray-600 hover:text-gray-900">
+                            className="underline text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300">
                             Already registered?
                         </Link>
 

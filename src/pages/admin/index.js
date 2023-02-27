@@ -1,7 +1,5 @@
 import { useAuth } from '@/hooks/auth'
-import { useRouter } from 'next/client'
 import AppLayout from '@/components/Layouts/AppLayout'
-import Link from 'next/link'
 import Head from 'next/head'
 import { useState } from 'react'
 

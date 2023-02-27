@@ -1,7 +1,7 @@
 import AppLayout from '@/components/Layouts/AppLayout'
 import Head from 'next/head'
 import axios from '@/lib/axios'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import YoutubeIFrame from '@/components/YoutubeIFrame'
 
@@ -222,9 +222,7 @@ const Course = () => {
 export const Quiz = ({ content, onNext, isFinalPage }) => {
     return (
         <>
-            {content.text && (
-                <Preview doc={content.text} className="mt-8" />
-            )}
+            {content.text && <Preview doc={content.text} className="mt-8" />}
             {content.is_true_false && (
                 <div className="flex justify-center xl:mt-8 mt-4">
                     <button

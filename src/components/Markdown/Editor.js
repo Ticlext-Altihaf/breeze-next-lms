@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect } from 'react'
-import { EditorState } from '@codemirror/state'
 import useCodeMirror from './use-codemirror'
 
 const Editor = props => {

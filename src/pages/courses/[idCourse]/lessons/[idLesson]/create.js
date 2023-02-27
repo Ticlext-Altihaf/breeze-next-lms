@@ -3,11 +3,11 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import axios from '@/lib/axios'
 import AppLayout from '@/components/Layouts/AppLayout'
-import Link from 'next/link'
 import Head from 'next/head'
 import Editor from '@/components/Markdown/Editor'
 import Preview from '@/components/Markdown/Preview'
 import * as libType from '@/lib/type'
+
 export default function CreateContent(content) {
     const { user } = useAuth({ middleware: 'auth' })
     const router = useRouter()

@@ -5,12 +5,11 @@ import * as prism from 'react-syntax-highlighter/dist/cjs/styles/prism'
 import ReactMarkdown from 'react-markdown'
 import CopyBtn from './copy-btn'
 import styles from '@/styles/react-markdown.module.css'
-import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import remarkMermaid from 'remark-mermaidjs'
+
 const Preview = props => {
     const { resolvedTheme } = useTheme()
     return (
