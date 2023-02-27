@@ -1,5 +1,5 @@
 import AppLayout from '@/components/Layouts/AppLayout'
-import CoursesGrid from '@/components/CoursesGrid'
+import CoursesGrid from '@/components/Layouts/CoursesGrid'
 import Head from 'next/head'
 import axios from '@/lib/axios'
 import { useEffect, useState } from 'react'

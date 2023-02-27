@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import axios from '@/lib/axios'
 import AppLayout from '@/components/Layouts/AppLayout'
-import CoursesGrid from '@/components/CoursesGrid'
+import CoursesGrid from '@/components/Layouts/CoursesGrid'
 
 export default function TeacherHome() {
     const { user } = useAuth({ middleware: 'teacher' })
