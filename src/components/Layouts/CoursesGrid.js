@@ -49,7 +49,7 @@ const CoursesGrid = ({ courses }) => {
                                 />
                                 <div className="text-left">
                                     <p className="text-black dark:text-white">
-                                        {course.author.name}
+                                        {course.author?.name}
                                     </p>
                                 </div>
                             </div>
