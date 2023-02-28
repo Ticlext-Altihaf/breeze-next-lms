@@ -5,6 +5,10 @@ if (!ISSERVER && !localStorage.getItem('lang')) {
     localStorage.setItem('lang', 'en')
 }
 const lang = ISSERVER ? 'en' : localStorage.getItem('lang')
+let params = {}
+if(process.env.NODE_ENV === 'development') {
+    params['XDEBUG_SESSION_START'] = 'PHPSTORM'
+}
 const axios = Axios.create({
     baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
     headers: {
@@ -12,9 +16,7 @@ const axios = Axios.create({
         Accept: 'application/json',
         'Accept-Language': lang,
     },
-    params: {
-        XDEBUG_SESSION_START: 'PHPSTORM',
-    },
+    params: params,
     withCredentials: true,
 })
 
