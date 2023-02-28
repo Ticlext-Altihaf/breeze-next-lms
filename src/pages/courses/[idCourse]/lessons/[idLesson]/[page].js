@@ -168,7 +168,9 @@ const Course = () => {
                 </div>
             )}
             {content && (
-                <div className="mt-24 divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0 flex flex-col justify-between xl:px-72 md:px-24 sm:px-12 px-4">
+                <div
+                    className="mt-24 divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:divide-y-0 flex flex-col justify-between xl:px-72 md:px-24 sm:px-12 px-4"
+                    id="content">
                     {content.type === type.lessonTypes.text && (
                         <Preview doc={content.text} className="mt-8" />
                     )}
@@ -234,6 +236,7 @@ export const Quiz = ({ content, onNext, isFinalPage }) => {
                                 answer_id: 1,
                             })
                         }
+                        data-testid="answer-1"
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4">
                         True
                     </button>
@@ -245,6 +248,7 @@ export const Quiz = ({ content, onNext, isFinalPage }) => {
                                 answer_id: 0,
                             })
                         }
+                        data-testid="answer-0"
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         False
                     </button>
@@ -255,7 +259,8 @@ export const Quiz = ({ content, onNext, isFinalPage }) => {
                     {content.choices.map((answer, index) => (
                         <button
                             key={index}
-                            className=" hover:bg-gray-200 text-white font-bold py-2 px-4 rounded disabled:opacity-50 xl:mt-8 mt-4 mr-4 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
+                            className="py-2 px-4 rounded disabled:opacity-50 xl:mt-8 mt-4 mr-4 dark:bg-gray-800 dark:hover:bg-gray-700 bg-blue-500 hover:bg-blue-700"
+                            data-testid={`answer-${index}`}
                             onClick={() => {
                                 onNext({
                                     type: type.quizType.multiple_choice,
@@ -263,7 +268,7 @@ export const Quiz = ({ content, onNext, isFinalPage }) => {
                                     answer_id: answer.id,
                                 })
                             }}>
-                            <Preview doc={answer.text} />
+                            <Preview doc={answer.text} className="text-white" />
                         </button>
                     ))}
                 </div>

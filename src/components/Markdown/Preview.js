@@ -13,7 +13,8 @@ import remarkMermaid from 'remark-mermaidjs'
 const Preview = props => {
     const { resolvedTheme } = useTheme()
     return (
-        <div className="prose dark:prose-invert markdown-body reactMarkDown max-w-none">
+        <div
+            className={`prose dark:prose-invert markdown-body reactMarkDown max-w-none ${props.className}`}>
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath, remarkMermaid]}
                 rehypePlugins={[rehypeKatex]}
