@@ -18,12 +18,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated = '/' } = {}) => {
     )
 
     const csrf = async () => {
-        const res = await axios.get('/csrf')
-        const token = res.data.data
-        if (sessionStorage) {
-            sessionStorage.setItem('csrf', token)
-        }
-        axios.defaults.headers.common['X-CSRF-TOKEN'] = token
+        //cookiesless
     }
 
     const register = async ({ setErrors, ...props }) => {
