@@ -108,6 +108,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated = '/' } = {}) => {
     }
 
     const logout = async () => {
+        await csrf()
         if (!error) {
             try {
                 await axios.post('/logout').then(() => mutate())
