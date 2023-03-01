@@ -6,7 +6,7 @@ if (!ISSERVER && !localStorage.getItem('lang')) {
 }
 const lang = ISSERVER ? 'en' : localStorage.getItem('lang')
 let params = {}
-if(process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
     params['XDEBUG_SESSION_START'] = 'PHPSTORM'
 }
 const axios = Axios.create({
