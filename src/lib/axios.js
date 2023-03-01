@@ -20,5 +20,37 @@ const axios = Axios.create({
     params: params,
     withCredentials: true,
 })
+function getToken() {
+    if (localStorage.getItem('token')) {
+        return localStorage.getItem('token')
+    }
+    if (sessionStorage.getItem('token')) {
+        return sessionStorage.getItem('token')
+    }
+}
 
+export function setToken(token, remember) {
+    if (!token) {
+        return
+    }
+    if (remember) {
+        localStorage.setItem('token', token)
+    } else {
+        sessionStorage.setItem('token', token)
+    }
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+}
+
+export function removeToken() {
+    localStorage.removeItem('token')
+    sessionStorage.removeItem('token')
+    delete axios.defaults.headers.common['Authorization']
+}
+
+if (!ISSERVER) {
+    const token = getToken()
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+    }
+}
 export default axios

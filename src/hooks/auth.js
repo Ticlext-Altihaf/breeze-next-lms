@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import axios from '@/lib/axios'
+import axios, { removeToken, setToken } from '@/lib/axios'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
@@ -17,18 +17,25 @@ export const useAuth = ({ middleware, redirectIfAuthenticated = '/' } = {}) => {
             }),
     )
 
-    const csrf = async () => {
-        //cookiesless
+    const deviceName = async () => {
+        //get device id
+        let deviceName = localStorage.getItem('device_name')
+        if (!deviceName) {
+            deviceName = navigator.userAgent + ';' + new Date().getTime()
+            localStorage.setItem('device_name', deviceName)
+        }
+        return deviceName
     }
 
     const register = async ({ setErrors, ...props }) => {
-        await csrf()
-
+        props.device_name = await deviceName()
         setErrors([])
 
         axios
             .post('/register', props)
-            .then(() => mutate())
+            .then(() => {
+                login({ setErrors, ...props })
+            })
             .catch(error => {
                 if (error.response.status !== 422) throw error
 
@@ -47,14 +54,17 @@ export const useAuth = ({ middleware, redirectIfAuthenticated = '/' } = {}) => {
     }
 
     const login = async ({ setErrors, setStatus, ...props }) => {
-        await csrf()
-
+        props.device_name = await deviceName()
         setErrors([])
-        setStatus(null)
-
+        if (setStatus) setStatus(null)
+        const remember = props.remember
         axios
             .post('/login', props)
-            .then(() => mutate())
+            .then(response => {
+                const token = response.data.token
+                setToken(token, remember)
+                mutate()
+            })
             .catch(error => {
                 if (error.response.status !== 422) throw error
 
@@ -63,7 +73,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated = '/' } = {}) => {
     }
 
     const forgotPassword = async ({ setErrors, setStatus, email }) => {
-        await csrf()
+        await deviceName()
 
         setErrors([])
         setStatus(null)
@@ -79,7 +89,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated = '/' } = {}) => {
     }
 
     const resetPassword = async ({ setErrors, setStatus, ...props }) => {
-        await csrf()
+        await deviceName()
 
         setErrors([])
         setStatus(null)
@@ -103,15 +113,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated = '/' } = {}) => {
     }
 
     const logout = async () => {
-        await csrf()
-        if (!error) {
-            try {
-                await axios.post('/logout').then(() => mutate())
-            } catch (error) {
-                /* empty */
-            }
-        }
-
+        removeToken()
         //use window.location instead of router.push to force reload
         window.location.pathname = '/login'
     }
@@ -135,6 +137,11 @@ export const useAuth = ({ middleware, redirectIfAuthenticated = '/' } = {}) => {
             if (middleware === 'teacher' && !user?.is_teacher) router.push('/')
         }
     }, [user, error])
+    //From the code above the "middleware" is actually role
+    //default role is authenticated user
+    //middleware = 'guest' means user is not authenticated
+    //middleware = 'admin' means user is admin
+    //middleware = 'teacher' means user is teacher
 
     return {
         user,
