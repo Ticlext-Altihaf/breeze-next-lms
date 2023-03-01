@@ -134,7 +134,12 @@ export const useAuth = ({ middleware, redirectIfAuthenticated = '/' } = {}) => {
         if (error) logout()
         else if (user) {
             if (middleware === 'admin' && !user?.is_admin) router.push('/')
-            if (middleware === 'teacher' && !user?.is_teacher) router.push('/')
+            if (
+                middleware === 'teacher' &&
+                (!user?.is_teacher || !user?.is_admin)
+            ) {
+                router.push('/')
+            }
         }
     }, [user, error])
     //From the code above the "middleware" is actually role
