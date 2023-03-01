@@ -69,7 +69,7 @@ test('register with wrong password', async ({ page }) => {
     ).toBeVisible()
 })
 
-async function login(page) {
+async function login(page, { scenarioWrongPassword = false } = {}) {
     await page.goto('http://localhost:3000/')
     await expect(page).toHaveURL('http://localhost:3000')
     // The new page should "Login" and "Register" links
@@ -79,10 +79,17 @@ async function login(page) {
     await page.keyboard.type(randomEmail)
     await page.keyboard.press('Tab')
     //Password
-    await page.keyboard.type(password)
+    if (scenarioWrongPassword) {
+        await page.keyboard.type('wrongpassword')
+    } else {
+        await page.keyboard.type(password)
+    }
     await page.keyboard.press('Tab')
     //Find button
     await page.getByRole('button').click()
+    if (scenarioWrongPassword) {
+        return
+    }
     //wait for redirect to /dashboard
     await sleep(1000)
     await expect(page).toHaveURL('http://localhost:3000/dashboard')
@@ -90,6 +97,16 @@ async function login(page) {
 
 test('login', async ({ page }) => {
     await login(page)
+})
+
+test('login with wrong password', async ({ page }) => {
+    await login(page, { scenarioWrongPassword: true })
+    await expect(page).toHaveURL('http://localhost:3000/login')
+    await expect(
+        page.locator('p', {
+            hasText: 'These credentials do not match our records.',
+        }),
+    ).toBeVisible()
 })
 
 test('logout', async ({ page }) => {
