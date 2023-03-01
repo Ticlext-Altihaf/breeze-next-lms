@@ -5,6 +5,7 @@ if (!ISSERVER && !localStorage.getItem('lang')) {
     localStorage.setItem('lang', 'en')
 }
 const lang = ISSERVER ? 'en' : localStorage.getItem('lang')
+
 let params = {}
 if (process.env.NODE_ENV === 'development') {
     params['XDEBUG_SESSION_START'] = 'PHPSTORM'

@@ -17,7 +17,14 @@ export const useAuth = ({ middleware, redirectIfAuthenticated = '/' } = {}) => {
             }),
     )
 
-    const csrf = () => axios.get('/csrf')
+    const csrf = async () => {
+        const res = await axios.get('/csrf')
+        const token = res.data.data
+        if (sessionStorage) {
+            sessionStorage.setItem('csrf', token)
+        }
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = token
+    }
 
     const register = async ({ setErrors, ...props }) => {
         await csrf()
